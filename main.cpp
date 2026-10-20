@@ -2,6 +2,7 @@
 
 #include <QApplication>
 #include <QLocale>
+#include <QLabel>
 #include <QTranslator>
 
 int main(int argc, char *argv[])
@@ -17,6 +18,7 @@ int main(int argc, char *argv[])
             break;
         }
     }
+
     MainWindow w;
     w.show();
     return QApplication::exec();
