@@ -1,5 +1,8 @@
 #include "mainwindow.h"
 
+#include "database.h"
+#include <QMessageBox>
+
 #include <QApplication>
 #include <QLocale>
 #include <QLabel>
@@ -8,6 +11,27 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    // Se connecter avant d'afficher la fenêtre principale
+    if (!Database::connect()) {
+        QMessageBox::critical(
+            nullptr,
+            "Erreur",
+            "Connexion à la base de donnée échouée"
+            );
+
+        return 1;
+
+    }
+
+    if (!Database::initializeSchema()) {
+        QMessageBox::critical(
+            nullptr,
+            "Erreur",
+            "Impossible de créer les tables."
+            );
+        return 1;
+    }
 
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();

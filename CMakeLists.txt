@@ -19,6 +19,7 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
+        database/schema.sql
         ${TS_FILES}
 )
 
@@ -26,6 +27,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(GestionEmployer
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        database.h
+        database.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET GestionEmployer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -75,3 +78,11 @@ install(TARGETS GestionEmployer
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(GestionEmployer)
 endif()
+
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/database")
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/database/schema.sql"
+    "${CMAKE_CURRENT_BINARY_DIR}/database/schema.sql"
+    COPYONLY
+)
