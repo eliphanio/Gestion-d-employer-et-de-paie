@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>869</width>
+    <height>430</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>6</horstretch>
+    <verstretch>6</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="font">
+   <font>
+    <strikeout>false</strikeout>
+   </font>
+  </property>
+  <property name="cursor">
+   <cursorShape>ArrowCursor</cursorShape>
+  </property>
+  <property name="windowTitle">
+   <string>Gestion d'employé et de paie</string>
+  </property>
+  <property name="windowIcon">
+   <iconset theme="QIcon::ThemeIcon::UserAvailable"/>
+  </property>
+  <property name="layoutDirection">
+   <enum>Qt::LayoutDirection::LeftToRight</enum>
+  </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">color: rgb(63, 63, 63);</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">background: rgb(255, 255, 255)</string>
+   </property>
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>921</width>
+      <height>431</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="2,7">
+     <item>
+      <widget class="QWidget" name="sidebar" native="true">
+       <property name="styleSheet">
+        <string notr="true">background: rgb(20, 43, 255)</string>
+       </property>
+       <widget class="QWidget" name="verticalLayoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>181</width>
+          <height>341</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="font">
+            <font>
+             <italic>false</italic>
+             <bold>true</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color : white;
+margin: auto;</string>
+           </property>
+           <property name="text">
+            <string>MENU PRINCIPAL</string>
+           </property>
+           <property name="textFormat">
+            <enum>Qt::TextFormat::PlainText</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="menuPoste">
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">padding: 6px;
+border: none;
+color: white;
+background: rgb(20, 43, 255);
+
+</string>
+           </property>
+           <property name="text">
+            <string>Poste</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="menuEmploye">
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">padding: 6px;
+border: none;
+color: white;
+background: rgb(20, 43, 255);</string>
+           </property>
+           <property name="text">
+            <string>Employer</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="menuPointage">
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">padding: 6px;
+border: none;
+color: white;
+background: rgb(20, 43, 255);</string>
+           </property>
+           <property name="text">
+            <string>Pointage</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="menuPaie">
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">padding: 6px;
+border: none;
+color: white;
+background: rgb(20, 43, 255);</string>
+           </property>
+           <property name="text">
+            <string>Paie</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="menuMasseSalariale">
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">padding: 6px;
+border: none;
+color: white;
+background: rgb(20, 43, 255);</string>
+           </property>
+           <property name="text">
+            <string>Masse salariale</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="menuEmployeByPoste">
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">padding: 6px;
+border: none;
+color: white;
+background: rgb(20, 43, 255);</string>
+           </property>
+           <property name="text">
+            <string>Employé par poste</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="menuQuitte">
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">padding: 6px;
+border: none;
+color: white;
+background: rgb(20, 43, 255);</string>
+           </property>
+           <property name="text">
+            <string>Quitté</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="container" native="true">
+       <widget class="QWidget" name="horizontalLayoutWidget_2">
+        <property name="geometry">
+         <rect>
+          <x>340</x>
+          <y>0</y>
+          <width>311</width>
+          <height>61</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <widget class="QPushButton" name="removePoste">
+           <property name="styleSheet">
+            <string notr="true">background: rgb(255, 0, 0);
+color: white;
+border: solid 1px;
+border-radius: 4px;
+padding: 4px;
+</string>
+           </property>
+           <property name="text">
+            <string>Supprimé un poste</string>
+           </property>
+           <property name="icon">
+            <iconset theme="QIcon::ThemeIcon::EditDelete"/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="addPoste">
+           <property name="styleSheet">
+            <string notr="true">
+background: rgb(20, 43, 255);
+color: white;
+border: solid 1px;
+border-radius: 4px;
+padding: 4px;</string>
+           </property>
+           <property name="text">
+            <string>Ajouez un poste</string>
+           </property>
+           <property name="icon">
+            <iconset theme="QIcon::ThemeIcon::ListAdd"/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="widget" native="true">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>80</y>
+          <width>631</width>
+          <height>331</height>
+         </rect>
+        </property>
+        <widget class="QTableWidget" name="tableWidgetPoste">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>631</width>
+           <height>331</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">width: 100%;</string>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+         </property>
+         <column>
+          <property name="text">
+           <string>Libelle</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Salaire de base</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Taux d'heure sup</string>
+          </property>
+         </column>
+        </widget>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <action name="action_3">
+   <property name="text">
+    <string>Je yape</string>
+   </property>
+  </action>
+  <action name="actionNew_posteEmplyer">
+   <property name="text">
+    <string>New posteEmplyer</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -12,25 +12,40 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Sql LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Sql LinguistTools)
 
+# Emplacement des fichiers Qt Designer
+set(CMAKE_AUTOUIC_SEARCH_PATHS
+    ${CMAKE_CURRENT_SOURCE_DIR}/ui
+)
+
+# Fichier de traduction
+set(TS_FILES
+    translations/GestionEmployer_fr_FR.ts
+)
+
 set(TS_FILES GestionEmployer_fr_FR.ts)
 
 set(PROJECT_SOURCES
-        main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
+        src/main.cpp
+        src/mainwindow.cpp
+        include/mainwindow.h
+        ui/mainwindow.ui
         database/schema.sql
         ${TS_FILES}
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+
     qt_add_executable(GestionEmployer
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        database.h
-        database.cpp
-        schema.cpp
+        include/database.h
+        src/database.cpp
+        src/schema.cpp
     )
+
+target_include_directories(GestionEmployer PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET GestionEmployer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)

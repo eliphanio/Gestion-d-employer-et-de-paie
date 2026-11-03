@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "QSqlDatabase"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -17,10 +18,16 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
 
+    void affichePoste();
+
 private slots:
     void on_pushButton_clicked();
 
+    void quitClicked();
+
 private:
     Ui::MainWindow *ui;
+    QSqlDatabase db;
+
 };
 #endif // MAINWINDOW_H
