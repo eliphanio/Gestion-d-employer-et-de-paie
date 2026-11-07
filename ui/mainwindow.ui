@@ -272,7 +272,7 @@ padding: 4px;</string>
            <x>0</x>
            <y>0</y>
            <width>611</width>
-           <height>71</height>
+           <height>311</height>
           </rect>
          </property>
          <property name="styleSheet">
@@ -298,17 +298,17 @@ padding: 4px;</string>
          </column>
         </widget>
        </widget>
-       <widget class="QDialogButtonBox" name="buttonBox">
+       <widget class="QPushButton" name="pushButton">
         <property name="geometry">
          <rect>
-          <x>140</x>
-          <y>280</y>
-          <width>156</width>
+          <x>40</x>
+          <y>40</y>
+          <width>75</width>
           <height>24</height>
          </rect>
         </property>
-        <property name="standardButtons">
-         <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
+        <property name="text">
+         <string>Teste</string>
         </property>
        </widget>
       </widget>
