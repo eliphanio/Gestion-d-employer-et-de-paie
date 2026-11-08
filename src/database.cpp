@@ -21,7 +21,7 @@ bool Database::connect()
     QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
 
     db.setDatabaseName(
-        "Driver={MySQL ODBC 26.7 Unicode Driver};"
+        "Driver={MySQL ODBC 26.10 Unicode Driver};"
         "Server=127.0.0.1;"
         "Port=3306;"
         "Database=gestion_paie;"
