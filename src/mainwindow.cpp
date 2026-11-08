@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include "ecrans_paie.h"
 #include "QLabel"
 #include "QPushButton"
 #include "QSqlQuery"
@@ -34,17 +35,21 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->menuPaie, &QPushButton::clicked,
             this, [this]() {
-                ui->stackedWidgetContente->setCurrentWidget(ui->paiePage);
+                BulletinDialog dlg(this);
+                dlg.exec();
             });
 
     connect(ui->menuMasseSalariale, &QPushButton::clicked,
             this, [this]() {
-                ui->stackedWidgetContente->setCurrentWidget(ui->massePage);
+                MasseSalarialeDialog dlg(this);
+                dlg.exec();
             });
     connect(ui->menuEmployeByPoste, &QPushButton::clicked,
             this, [this]() {
-                ui->stackedWidgetContente->setCurrentWidget(ui->posteEmployePage);
+                EmployesParPosteDialog dlg(this);
+                dlg.exec();
             });
+    connect(ui->menuQuitte, &QPushButton::clicked, this, &MainWindow::quitClicked);
 }
 
 MainWindow::~MainWindow()
