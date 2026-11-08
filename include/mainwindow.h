@@ -19,6 +19,7 @@ public:
     ~MainWindow() override;
 
     void affichePoste();
+    void afficheEmploye();
 
 private slots:
     void on_pushButton_clicked();
