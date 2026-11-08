@@ -10,23 +10,24 @@
 bool Database::connect()
 {
     // Vérifier que le pilote MySQL est disponible
-    if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
-        qDebug() << "Pilote QMYSQL indisponible.";
+    if (!QSqlDatabase::isDriverAvailable("QODBC")) {
+        qDebug() << "Pilote QODBC indisponible.";
         qDebug() << "Pilotes disponibles :"
                  << QSqlDatabase::drivers();
         return false;
     }
 
     // Créer la connexion
-    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
 
-    db.setDatabaseName("gestion_paie");
-
-    db.setHostName("127.0.0.1");
-    db.setPort(3306);
-    db.setUserName("root");
-    db.setPassword("");
-
+    db.setDatabaseName(
+        "Driver={MySQL ODBC 26.7 Unicode Driver};"
+        "Server=127.0.0.1;"
+        "Port=3306;"
+        "Database=gestion_paie;"
+        "User=root;"
+        "Password=;"
+        );
 
     // Ouvrir la connexion
     if (!db.open()) {
