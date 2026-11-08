@@ -209,107 +209,133 @@ background: rgb(20, 43, 255);</string>
      </item>
      <item>
       <widget class="QWidget" name="container" native="true">
-       <widget class="QWidget" name="horizontalLayoutWidget_2">
+       <widget class="QStackedWidget" name="stackedWidgetContente">
         <property name="geometry">
          <rect>
-          <x>340</x>
+          <x>-10</x>
           <y>0</y>
-          <width>311</width>
-          <height>61</height>
+          <width>671</width>
+          <height>441</height>
          </rect>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
-         <item>
-          <widget class="QPushButton" name="removePoste">
-           <property name="styleSheet">
-            <string notr="true">background: rgb(255, 0, 0);
-color: white;
-border: solid 1px;
-border-radius: 4px;
-padding: 4px;
-</string>
-           </property>
-           <property name="text">
-            <string>Supprimé un poste</string>
-           </property>
-           <property name="icon">
-            <iconset theme="QIcon::ThemeIcon::EditDelete"/>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="addPoste">
-           <property name="styleSheet">
-            <string notr="true">
-background: rgb(20, 43, 255);
-color: white;
-border: solid 1px;
-border-radius: 4px;
-padding: 4px;</string>
-           </property>
-           <property name="text">
-            <string>Ajouez un poste</string>
-           </property>
-           <property name="icon">
-            <iconset theme="QIcon::ThemeIcon::ListAdd"/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="widget" native="true">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>80</y>
-          <width>631</width>
-          <height>111</height>
-         </rect>
+        <property name="currentIndex">
+         <number>0</number>
         </property>
-        <widget class="QTableWidget" name="tableWidgetPoste">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>611</width>
-           <height>311</height>
-          </rect>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">width: 100%;</string>
-         </property>
-         <property name="editTriggers">
-          <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
-         </property>
-         <column>
-          <property name="text">
-           <string>Libelle</string>
+        <widget class="QWidget" name="postePage">
+         <widget class="QLabel" name="label_2">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>10</y>
+            <width>49</width>
+            <height>16</height>
+           </rect>
           </property>
-         </column>
-         <column>
           <property name="text">
-           <string>Salaire de base</string>
+           <string>Poste</string>
           </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Taux d'heure sup</string>
+         </widget>
+         <widget class="QTableWidget" name="tableWidgetPoste">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>80</y>
+            <width>621</width>
+            <height>331</height>
+           </rect>
           </property>
-         </column>
+          <column>
+           <property name="text">
+            <string>Poste</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Salaire de base</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Taux de heure sup</string>
+           </property>
+          </column>
+         </widget>
         </widget>
-       </widget>
-       <widget class="QPushButton" name="pushButton">
-        <property name="geometry">
-         <rect>
-          <x>40</x>
-          <y>40</y>
-          <width>75</width>
-          <height>24</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Teste</string>
-        </property>
+        <widget class="QWidget" name="pointagePage">
+         <widget class="QLabel" name="label_3">
+          <property name="geometry">
+           <rect>
+            <x>160</x>
+            <y>140</y>
+            <width>49</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>empoye</string>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="massePage">
+         <widget class="QLabel" name="label_4">
+          <property name="geometry">
+           <rect>
+            <x>170</x>
+            <y>180</y>
+            <width>49</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>pointage</string>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="paiePage">
+         <widget class="QLabel" name="label_5">
+          <property name="geometry">
+           <rect>
+            <x>150</x>
+            <y>150</y>
+            <width>49</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>paie</string>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="posteEmployePage">
+         <widget class="QLabel" name="label_6">
+          <property name="geometry">
+           <rect>
+            <x>80</x>
+            <y>110</y>
+            <width>49</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Masse salariale</string>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="employePage">
+         <widget class="QLabel" name="label_7">
+          <property name="geometry">
+           <rect>
+            <x>90</x>
+            <y>110</y>
+            <width>49</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Poste/employe</string>
+          </property>
+         </widget>
+        </widget>
        </widget>
       </widget>
      </item>

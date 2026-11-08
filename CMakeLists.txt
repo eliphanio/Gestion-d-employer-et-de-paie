@@ -41,8 +41,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         include/database.h
         src/database.cpp
         src/schema.cpp
-        addpostdialog.h addpostdialog.cpp addpostdialog.ui
-        removepostdialog.h removepostdialog.cpp removepostdialog.ui
+        include/addpostdialog.h src/addpostdialog.cpp ui/addpostdialog.ui
+        include/removepostdialog.h src/removepostdialog.cpp ui/removepostdialog.ui
 
     )
 

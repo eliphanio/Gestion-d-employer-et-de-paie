@@ -10,7 +10,41 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     affichePoste();
+
+    // Page affichée au démarrage
+    ui->stackedWidgetContente->setCurrentIndex(0);
+
+    // Navigation du sidebar
+    connect(ui->menuPoste, &QPushButton::clicked,
+            this, [this]() {
+                ui->stackedWidgetContente->setCurrentWidget(ui->postePage);
+            });
+
+    connect(ui->menuEmploye, &QPushButton::clicked,
+            this, [this]() {
+                ui->stackedWidgetContente->setCurrentWidget(ui->employePage);
+            });
+
+    connect(ui->menuPointage, &QPushButton::clicked,
+            this, [this]() {
+                ui->stackedWidgetContente->setCurrentWidget(ui->pointagePage);
+            });
+
+    connect(ui->menuPaie, &QPushButton::clicked,
+            this, [this]() {
+                ui->stackedWidgetContente->setCurrentWidget(ui->paiePage);
+            });
+
+    connect(ui->menuMasseSalariale, &QPushButton::clicked,
+            this, [this]() {
+                ui->stackedWidgetContente->setCurrentWidget(ui->massePage);
+            });
+    connect(ui->menuEmployeByPoste, &QPushButton::clicked,
+            this, [this]() {
+                ui->stackedWidgetContente->setCurrentWidget(ui->posteEmployePage);
+            });
 }
 
 MainWindow::~MainWindow()
