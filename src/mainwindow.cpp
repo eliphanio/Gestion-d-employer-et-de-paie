@@ -12,24 +12,12 @@
 #include "updateemployedialog.h"
 #include "removeemployedialog.h"
 #include "database.h"
-#include "pointage.h"
-#include <QVBoxLayout>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-    // Création du module Pointage
-    PointagePage *pagePointage = new PointagePage(ui->pointagePage);
-
-    // Organisation de la page
-    QVBoxLayout *layoutPointage = new QVBoxLayout(ui->pointagePage);
-
-    layoutPointage->setContentsMargins(10, 10, 10, 10);
-
-    layoutPointage->addWidget(pagePointage);
 
     connect(ui->searchBar,
             &QLineEdit::textChanged,
@@ -327,4 +315,3 @@ void MainWindow::on_btnRemoveEmploye_clicked()
     removeEmployeDialog dialog(this);
     dialog.exec();
 }
-
