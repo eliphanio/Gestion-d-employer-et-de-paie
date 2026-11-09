@@ -5,12 +5,18 @@
 #include "QPushButton"
 #include "QSqlQuery"
 #include <QSqlError>
+#include "database.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    connect(ui->searchBar,
+            &QLineEdit::textChanged,
+            this,
+            &MainWindow::rechercherEmploye);
 
     nEmploye();
     nPoste();
