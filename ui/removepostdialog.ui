@@ -75,7 +75,7 @@ QLabel {
     </item>
    </layout>
   </widget>
-  <widget class="QDialogButtonBox" name="buttonBox">
+  <widget class="QDialogButtonBox" name="buttonBoxRemovePoste">
    <property name="geometry">
     <rect>
      <x>95</x>

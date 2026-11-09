@@ -6,6 +6,8 @@ addPostDialog::addPostDialog(QWidget *parent)
     , ui(new Ui::addPostDialog)
 {
     ui->setupUi(this);
+    connect(ui->buttonBoxAddPoste, &QDialogButtonBox::rejected,
+            this, &QDialog::reject);
 }
 
 addPostDialog::~addPostDialog()

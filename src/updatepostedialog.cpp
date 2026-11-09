@@ -6,6 +6,8 @@ updatePosteDialog::updatePosteDialog(QWidget *parent)
     , ui(new Ui::updatePosteDialog)
 {
     ui->setupUi(this);
+    connect(ui->buttonBoxUpdatePoste, &QDialogButtonBox::rejected,
+            this, &QDialog::reject);
 }
 
 updatePosteDialog::~updatePosteDialog()
