@@ -30,6 +30,8 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
+    void afficherPagePaie(QWidget *page);
+    QWidget *pagePaieCourante = nullptr;
 
 };
 #endif // MAINWINDOW_H

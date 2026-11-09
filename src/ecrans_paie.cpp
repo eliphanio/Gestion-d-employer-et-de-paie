@@ -85,7 +85,7 @@ static bool estGras(int i) { return i == 3 || i == 6; }   // BRUT et NET
 // ============================================================
 //  Menu 4 : bulletin de paie
 // ============================================================
-BulletinDialog::BulletinDialog(QWidget *parent) : QDialog(parent)
+BulletinDialog::BulletinDialog(QWidget *parent) : QWidget(parent)
 {
     setWindowTitle("Edition d'un bulletin de paie");
     resize(560, 520);
@@ -220,7 +220,7 @@ void BulletinDialog::exporterPdf()
 // ============================================================
 //  Menu 5 : masse salariale par poste
 // ============================================================
-MasseSalarialeDialog::MasseSalarialeDialog(QWidget *parent) : QDialog(parent)
+MasseSalarialeDialog::MasseSalarialeDialog(QWidget *parent) : QWidget(parent)
 {
     setWindowTitle("Masse salariale d'un mois par poste");
     resize(600, 450);
@@ -290,7 +290,7 @@ void MasseSalarialeDialog::ouvrirGraphique()
 // ============================================================
 //  Menu 6 : employés par poste
 // ============================================================
-EmployesParPosteDialog::EmployesParPosteDialog(QWidget *parent) : QDialog(parent)
+EmployesParPosteDialog::EmployesParPosteDialog(QWidget *parent) : QWidget(parent)
 {
     setWindowTitle("Employés par poste");
     resize(700, 450);
