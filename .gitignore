@@ -83,3 +83,4 @@ CMakeLists.txt.user*
 /build*/
 /.qtcreator/
 database/jeu_essai.sql
+.env

@@ -1,5 +1,6 @@
 #pragma once
-#include <QDialog>
+#include <QDialog> 
+#include <QWidget> 
 #include <QList>
 
 #include "paie_calcul.h"
@@ -9,8 +10,9 @@ class QLabel;
 class QPushButton;
 class QTableWidget;
 
+
 // ---------- Menu 4 : Edition d'un bulletin de paie ----------
-class BulletinDialog : public QDialog
+class BulletinDialog : public QWidget
 {
     Q_OBJECT
 public:
@@ -36,7 +38,7 @@ private:
 };
 
 // ---------- Menu 5 : Masse salariale d'un mois par poste ----------
-class MasseSalarialeDialog : public QDialog
+class MasseSalarialeDialog : public QWidget
 {
     Q_OBJECT
 public:
@@ -59,7 +61,7 @@ private:
 };
 
 // ---------- Menu 6 : Employés par poste avec l'effectif ----------
-class EmployesParPosteDialog : public QDialog
+class EmployesParPosteDialog : public QWidget
 {
     Q_OBJECT
 public:
@@ -79,6 +81,8 @@ class GraphiqueMasseDialog : public QDialog
 {
     Q_OBJECT
 public:
-    GraphiqueMasseDialog(const QList<LignePoste> &lignes, int mois, int annee,
-                         QWidget *parent = nullptr);
+    GraphiqueMasseDialog(
+        const QList<LignePoste> &lignes, int mois, int annee,
+        QWidget *parent = nullptr
+    );
 };

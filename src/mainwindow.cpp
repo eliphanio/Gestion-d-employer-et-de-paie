@@ -43,21 +43,17 @@ MainWindow::MainWindow(QWidget *parent)
                 ui->stackedWidgetContente->setCurrentWidget(ui->pointagePage);
             });
 
-    connect(ui->menuPaie, &QPushButton::clicked,
-            this, [this]() {
-                BulletinDialog dlg(this);
-                dlg.exec();
-            });
+    connect(ui->menuPaie, &QPushButton::clicked, this, [this]() {
+        afficherPagePaie(new BulletinDialog);
+    });
 
-    connect(ui->menuMasseSalariale, &QPushButton::clicked,
-            this, [this]() {
-                MasseSalarialeDialog dlg(this);
-                dlg.exec();
-            });
-    connect(ui->menuEmployeByPoste, &QPushButton::clicked,
-            this, [this]() {
-                ui->stackedWidgetContente->setCurrentWidget(ui->posteEmployePage);
-            });
+    connect(ui->menuMasseSalariale, &QPushButton::clicked, this, [this]() {
+        afficherPagePaie(new MasseSalarialeDialog);
+    });
+
+    connect(ui->menuEmployeByPoste, &QPushButton::clicked, this, [this]() {
+        afficherPagePaie(new EmployesParPosteDialog);
+    });
 
     connect(ui->menuQuitte, &QPushButton::clicked, this, &MainWindow::quitClicked);
 }
@@ -106,6 +102,7 @@ void MainWindow::nPoste()
     }
     db.close();
 }
+
 void MainWindow::afficheEmploye()
 {
 
@@ -191,68 +188,20 @@ void MainWindow::affichePosteByEmploye()
     db.close();
 }
 
-
-void MainWindow::rechercherEmploye()
+void MainWindow::afficherPagePaie(QWidget *page)
 {
-    QString recherche = ui->searchBar->text().trimmed();
-
-    // Récupérer la connexion partagée
-    QSqlDatabase connexion = Database::getConnection();
-
-    // Vérifier la connexion
-    if (!connexion.isOpen()) {
-        qDebug() << "Connexion MySQL fermée.";
-
-        if (!Database::connect()) {
-            qDebug() << "Impossible de se connecter à MySQL.";
-            return;
-        }
-
-        connexion = Database::getConnection();
+    // supprime la page de paie précédente pour éviter d'en accumuler
+    if (pagePaieCourante) {
+        ui->stackedWidgetContente->removeWidget(pagePaieCourante);
+        pagePaieCourante->deleteLater();
     }
+    pagePaieCourante = page;
 
-    QSqlQuery query(connexion);
-
-    query.prepare(
-        "SELECT Matricule, Nom, Adresse, dateEmbauche "
-        "FROM employe "
-        "WHERE Nom LIKE :recherche "
-        "OR Matricule LIKE :recherche "
-        "ORDER BY Matricule ASC"
-        );
-
-    query.bindValue(":recherche", "%" + recherche + "%");
-
-    if (!query.exec()) {
-        qDebug() << "Erreur SQL :" << query.lastError().text();
-        return;
-    }
-
-    ui->tableWidgetEmploye->setSortingEnabled(false);
-    ui->tableWidgetEmploye->setRowCount(0);
-
-    int ligne = 0;
-
-    while (query.next()) {
-        ui->tableWidgetEmploye->insertRow(ligne);
-
-        ui->tableWidgetEmploye->setItem(ligne, 0, new QTableWidgetItem(query.value("Matricule").toString()));
-
-        ui->tableWidgetEmploye->setItem(ligne, 1, new QTableWidgetItem(query.value("Nom").toString()));
-
-        ui->tableWidgetEmploye->setItem(ligne, 2, new QTableWidgetItem(query.value("Adresse").toString()));
-
-        ui->tableWidgetEmploye->setItem(ligne, 3, new QTableWidgetItem(query.value("dateEmbauche").toString()));
-
-        ligne++;
-    }
-
-    ui->tableWidgetEmploye->setSortingEnabled(true);
+    ui->stackedWidgetContente->addWidget(page);
+    ui->stackedWidgetContente->setCurrentWidget(page);
 }
-
 
 void MainWindow::quitClicked()
 {
     QApplication::quit();
 }
-
