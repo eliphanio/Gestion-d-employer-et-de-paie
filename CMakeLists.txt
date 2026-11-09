@@ -49,6 +49,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         include/addemployedialog.h src/addemployedialog.cpp ui/addemployedialog.ui
         include/updateemployedialog.h src/updateemployedialog.cpp ui/updateemployedialog.ui
         include/removeemployedialog.h src/removeemployedialog.cpp ui/removeemployedialog.ui
+        include/pointage.h
+        src/pointage.cpp
     )
 
 target_include_directories(GestionEmployer PRIVATE
