@@ -20,6 +20,7 @@ public:
 
     void affichePoste();
     void afficheEmploye();
+    void affichePosteByEmploye();
 
 private slots:
     void on_pushButton_clicked();
