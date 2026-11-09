@@ -9,8 +9,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Sql Charts LinguistTools)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Sql Charts LinguistTools)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Sql Charts PrintSupport LinguistTools)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Sql Charts PrintSupport LinguistTools)
 
 # Emplacement des fichiers Qt Designer
 set(CMAKE_AUTOUIC_SEARCH_PATHS
@@ -44,7 +44,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         include/addpostdialog.h src/addpostdialog.cpp ui/addpostdialog.ui
         include/removepostdialog.h src/removepostdialog.cpp ui/removepostdialog.ui
         include/paie_calcul.h src/paie_calcul.cpp
-        include/ecrans_paie.h src/ecrans_paie.cpp
+        include/frontend.h src/frontend.cpp
 
     )
 
@@ -73,7 +73,12 @@ else()
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
 
-target_link_libraries(GestionEmployer PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Sql Qt${QT_VERSION_MAJOR}::Charts)
+target_link_libraries(GestionEmployer PRIVATE 
+        Qt${QT_VERSION_MAJOR}::Widgets 
+        Qt${QT_VERSION_MAJOR}::Sql 
+        Qt${QT_VERSION_MAJOR}::Charts
+        Qt${QT_VERSION_MAJOR}::PrintSupport
+        )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
@@ -107,35 +112,3 @@ configure_file(
     "${CMAKE_CURRENT_BINARY_DIR}/database/schema.sql"
     COPYONLY
 )
-
-
-
-project(GestionPaie LANGUAGES CXX)
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-set(CMAKE_AUTOMOC ON)
-
-find_package(Qt6 REQUIRED COMPONENTS
-    Widgets
-    Sql
-    PrintSupport
-)
-
-qt_add_executable(GestionPaie
-    main.cpp
-    mainwindow.h
-    mainwindow.cpp
-    paie_calcul.h
-    paie_calcul.cpp
-    database.h
-    database.cpp
-)
-
-target_link_libraries(GestionPaie PRIVATE
-    Qt6::Widgets
-    Qt6::Sql
-    Qt6::PrintSupport
-)
-

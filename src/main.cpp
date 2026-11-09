@@ -1,9 +1,6 @@
 #include "mainwindow.h"
-#include "frontend.h"
-
 #include "database.h"
 #include <QMessageBox>
-
 #include <QApplication>
 #include <QLocale>
 #include <QStringList>

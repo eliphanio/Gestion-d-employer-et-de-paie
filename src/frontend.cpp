@@ -1,6 +1,6 @@
 #include "frontend.h"
-
-#include <QWidget>
+#include "database.h"
+#include <QDebug>
 #include <QFrame>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -20,210 +20,100 @@
 #include <QLineEdit>
 #include <QComboBox>
 #include <QPushButton>
-#include <QStackedWidget>
 #include <QTableWidget>
 #include <QTableWidgetItem>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
 
 // =====================================================
-// CONSTRUCTEUR
+// OUTILS COMMUNS (visibles uniquement dans ce fichier)
 // =====================================================
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
+namespace {
+
+const char *STYLE_PAGE = R"(
+    #pagePaie {
+        background-color: #F3F6FB;
+    }
+
+    QGroupBox {
+        background-color: white;
+        border: 1px solid #D5DFED;
+        border-radius: 9px;
+        margin-top: 14px;
+        padding: 14px;
+        font-size: 15px;
+        font-weight: bold;
+        color: #173B70;
+    }
+
+    QGroupBox::title {
+        subcontrol-origin: margin;
+        left: 12px;
+        padding: 0 6px;
+    }
+
+    QLineEdit, QComboBox {
+        background-color: white;
+        border: 1px solid #C7D2E1;
+        border-radius: 6px;
+        padding: 9px;
+        min-height: 22px;
+        font-size: 14px;
+    }
+
+    QLineEdit:focus, QComboBox:focus {
+        border: 2px solid #2874CC;
+    }
+
+    QPushButton {
+        background-color: #E6ECF5;
+        color: #173B70;
+        border: none;
+        border-radius: 6px;
+        padding: 10px 15px;
+        font-weight: bold;
+    }
+
+    QPushButton:hover {
+        background-color: #D2E1F5;
+    }
+
+    QTableWidget {
+        background-color: white;
+        alternate-background-color: #F1F5FA;
+        border: 1px solid #D5DFED;
+        gridline-color: #D5DFED;
+        font-size: 13px;
+    }
+
+    QHeaderView::section {
+        background-color: #1D3D70;
+        color: white;
+        padding: 10px;
+        font-weight: bold;
+        border: none;
+    }
+)";
+
+void appliquerStyle(QWidget *page)
 {
-    setWindowTitle("Gestion des Employés et de la Paie");
-    resize(1450, 900);
-    setMinimumSize(1100, 700);
-
-    // Aucun bulletin n'est encore calculé.
-    setProperty("bulletinValide", false);
-
-    // Style général de la fenêtre.
-    setStyleSheet(R"(
-        QMainWindow {
-            background-color: #F3F6FB;
-        }
-
-        QGroupBox {
-            background-color: white;
-            border: 1px solid #D5DFED;
-            border-radius: 9px;
-            margin-top: 14px;
-            padding: 14px;
-            font-size: 15px;
-            font-weight: bold;
-            color: #173B70;
-        }
-
-        QGroupBox::title {
-            subcontrol-origin: margin;
-            left: 12px;
-            padding: 0 6px;
-        }
-
-        QLineEdit, QComboBox {
-            background-color: white;
-            border: 1px solid #C7D2E1;
-            border-radius: 6px;
-            padding: 9px;
-            min-height: 22px;
-            font-size: 14px;
-        }
-
-        QLineEdit:focus, QComboBox:focus {
-            border: 2px solid #2874CC;
-        }
-
-        QPushButton {
-            background-color: #E6ECF5;
-            color: #173B70;
-            border: none;
-            border-radius: 6px;
-            padding: 10px 15px;
-            font-weight: bold;
-        }
-
-        QPushButton:hover {
-            background-color: #D2E1F5;
-        }
-
-        QTableWidget {
-            background-color: white;
-            alternate-background-color: #F1F5FA;
-            border: 1px solid #D5DFED;
-            gridline-color: #D5DFED;
-            font-size: 13px;
-        }
-
-        QHeaderView::section {
-            background-color: #1D3D70;
-            color: white;
-            padding: 10px;
-            font-weight: bold;
-            border: none;
-        }
-    )");
-
-    // Conteneur principal.
-    QWidget *central = new QWidget(this);
-    setCentralWidget(central);
-
-    QHBoxLayout *mainLayout = new QHBoxLayout(central);
-    mainLayout->setContentsMargins(0, 0, 0, 0);
-    mainLayout->setSpacing(0);
-
-    // =================================================
-    // MENU LATÉRAL
-    // =================================================
-
-    QWidget *sidebar = new QWidget;
-    sidebar->setFixedWidth(240);
-    sidebar->setStyleSheet(
-        "background-color: #14294B;"
-    );
-
-    QVBoxLayout *sideLayout = new QVBoxLayout(sidebar);
-    sideLayout->setContentsMargins(15, 35, 15, 20);
-    sideLayout->setSpacing(20);
-
-    QLabel *logo = new QLabel("PaiePro");
-    logo->setAlignment(Qt::AlignCenter);
-    logo->setStyleSheet(
-        "color: white;"
-        "font-size: 30px;"
-        "font-weight: bold;"
-    );
-
-    QLabel *description = new QLabel(
-        "Gérer • Calculer • Payer"
-    );
-    description->setAlignment(Qt::AlignCenter);
-    description->setStyleSheet(
-        "color: #DCE6F5;"
-        "font-size: 13px;"
-    );
-
-    btnBulletin = new QPushButton("Bulletin de paie");
-    btnMasse = new QPushButton("Masse salariale");
-
-    QString menuStyle =
-        "QPushButton {"
-        "color: white;"
-        "background: transparent;"
-        "border: none;"
-        "padding: 15px;"
-        "text-align: left;"
-        "font-size: 15px;"
-        "border-radius: 8px;"
-        "}"
-        "QPushButton:hover {"
-        "background-color: #28558F;"
-        "}";
-
-    btnBulletin->setStyleSheet(menuStyle);
-    btnMasse->setStyleSheet(menuStyle);
-
-    sideLayout->addWidget(logo);
-    sideLayout->addWidget(description);
-    sideLayout->addSpacing(35);
-    sideLayout->addWidget(btnBulletin);
-    sideLayout->addWidget(btnMasse);
-    sideLayout->addStretch();
-
-    QLabel *version = new QLabel(
-        "Version 1.0\nENI Fianarantsoa"
-    );
-    version->setAlignment(Qt::AlignCenter);
-    version->setStyleSheet("color: #AABBD3;");
-
-    sideLayout->addWidget(version);
-
-    // =================================================
-    // PAGES CENTRALES
-    // =================================================
-
-    pages = new QStackedWidget;
-
-    pages->addWidget(creerPageBulletin());
-    pages->addWidget(creerPageMasse());
-
-    // Les quatre listes déroulantes existent maintenant.
-    initialiserPeriodes();
-
-    mainLayout->addWidget(sidebar);
-    mainLayout->addWidget(pages, 1);
-
-    // =================================================
-    // NAVIGATION
-    // =================================================
-
-    connect(
-        btnBulletin,
-        &QPushButton::clicked,
-        this,
-        [this]() {
-            pages->setCurrentIndex(0);
-        }
-    );
-
-    connect(
-        btnMasse,
-        &QPushButton::clicked,
-        this,
-        [this]() {
-            pages->setCurrentIndex(1);
-        }
-    );
+    page->setObjectName("pagePaie");
+    // Nécessaire pour qu'un QWidget personnalisé affiche son fond via le stylesheet.
+    page->setAttribute(Qt::WA_StyledBackground, true);
+    page->setStyleSheet(STYLE_PAGE);
 }
 
-
-// =====================================================
-// INITIALISATION DES PÉRIODES
-// =====================================================
-
-void MainWindow::initialiserPeriodes()
+QString montant(double valeur)
 {
-    QStringList mois = {
+    return QLocale(QLocale::French, QLocale::Madagascar)
+        .toString(valeur, 'f', 0);
+}
+
+void remplirPeriodes(QComboBox *mois, QComboBox *annee)
+{
+    const QStringList listeMois = {
         "Janvier", "Février", "Mars",
         "Avril", "Mai", "Juin",
         "Juillet", "Août", "Septembre",
@@ -231,83 +121,63 @@ void MainWindow::initialiserPeriodes()
     };
 
     const QDate dateActuelle = QDate::currentDate();
-
     const int anneeActuelle = dateActuelle.year();
 
-    // Éviter d'ajouter plusieurs fois les mêmes éléments.
-    moisBulletin->clear();
-    moisMasse->clear();
+    mois->clear();
+    annee->clear();
 
-    anneeBulletin->clear();
-    anneeMasse->clear();
+    mois->addItems(listeMois);
 
-    moisBulletin->addItems(mois);
-    moisMasse->addItems(mois);
-
-    for (int annee = anneeActuelle - 5;
-         annee <= anneeActuelle + 5;
-         ++annee) {
-
-        const QString valeur = QString::number(annee);
-
-        anneeBulletin->addItem(valeur);
-        anneeMasse->addItem(valeur);
+    for (int a = anneeActuelle - 5; a <= anneeActuelle + 5; ++a) {
+        annee->addItem(QString::number(a));
     }
 
-    const int indexMois = dateActuelle.month() - 1;
-
-    moisBulletin->setCurrentIndex(indexMois);
-    moisMasse->setCurrentIndex(indexMois);
-
-    const QString annee = QString::number(anneeActuelle);
-
-    anneeBulletin->setCurrentText(annee);
-    anneeMasse->setCurrentText(annee);
+    mois->setCurrentIndex(dateActuelle.month() - 1);
+    annee->setCurrentText(QString::number(anneeActuelle));
 }
 
-
-// =====================================================
-// FORMATAGE DES MONTANTS
-// =====================================================
-
-QString MainWindow::montant(double valeur) const
+QSqlDatabase connexionOuverte()
 {
-    return QLocale(QLocale::French, QLocale::Madagascar)
-        .toString(valeur, 'f', 0);
+    QSqlDatabase connexion = Database::getConnection();
+
+    if (!connexion.isOpen()) {
+        if (!Database::connect()) {
+            return QSqlDatabase();
+        }
+        connexion = Database::getConnection();
+    }
+
+    return connexion;
 }
 
+} // namespace
+
 
 // =====================================================
-// CRÉATION DE LA PAGE BULLETIN
+// =====================================================
+//                 BULLETIN DE PAIE
+// =====================================================
 // =====================================================
 
-QWidget *MainWindow::creerPageBulletin()
+BulletinDialog::BulletinDialog(QWidget *parent)
+    : QWidget(parent)
 {
-    QWidget *page = new QWidget;
+    appliquerStyle(this);
 
-    QVBoxLayout *layout = new QVBoxLayout(page);
-
+    QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(25, 20, 25, 20);
     layout->setSpacing(15);
 
-    QLabel *titre = new QLabel(
-        "Édition d'un bulletin de paie"
-    );
-
+    QLabel *titre = new QLabel("Édition d'un bulletin de paie");
     titre->setStyleSheet(
         "font-size: 23px;"
         "font-weight: bold;"
         "color: #173B70;"
     );
 
-    // =================================================
-    // INFORMATIONS EMPLOYÉ
-    // =================================================
+    // ---------- Informations employé ----------
 
-    QGroupBox *infos = new QGroupBox(
-        "Informations de l'employé"
-    );
-
+    QGroupBox *infos = new QGroupBox("Informations de l'employé");
     QGridLayout *form = new QGridLayout(infos);
 
     matriculeEdit = new QLineEdit;
@@ -340,21 +210,12 @@ QWidget *MainWindow::creerPageBulletin()
     form->addWidget(new QLabel("Année :"), 3, 2);
     form->addWidget(anneeBulletin, 3, 3);
 
-    // =================================================
-    // CALCUL DU BULLETIN
-    // =================================================
+    // ---------- Calcul du bulletin ----------
 
-    QGroupBox *calcul = new QGroupBox(
-        "Calcul du bulletin"
-    );
-
+    QGroupBox *calcul = new QGroupBox("Calcul du bulletin");
     QGridLayout *grid = new QGridLayout(calcul);
 
-    auto ajouterLigne = [&](
-        int ligne,
-        const QString &nom,
-        QLabel *&valeur
-    ) {
+    auto ajouterLigne = [&](int ligne, const QString &nom, QLabel *&valeur) {
         grid->addWidget(new QLabel(nom), ligne, 0);
 
         valeur = new QLabel("0 Ar");
@@ -377,38 +238,19 @@ QWidget *MainWindow::creerPageBulletin()
         "font-weight: bold;"
     );
 
-    // =================================================
-    // APERÇU DU BULLETIN
-    // =================================================
+    // ---------- Aperçu ----------
 
-    QGroupBox *apercu = new QGroupBox(
-        "Aperçu du bulletin"
-    );
-
+    QGroupBox *apercu = new QGroupBox("Aperçu du bulletin");
     QVBoxLayout *apercuLayout = new QVBoxLayout(apercu);
 
     tableauBulletin = new QTableWidget(7, 2);
-
-    tableauBulletin->setHorizontalHeaderLabels({
-        "Rubrique",
-        "Montant (Ar)"
-    });
-
-    tableauBulletin->horizontalHeader()
-        ->setSectionResizeMode(0, QHeaderView::Stretch);
-
-    tableauBulletin->horizontalHeader()
-        ->setSectionResizeMode(1, QHeaderView::Stretch);
-
+    tableauBulletin->setHorizontalHeaderLabels({"Rubrique", "Montant (Ar)"});
+    tableauBulletin->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     tableauBulletin->verticalHeader()->hide();
-
-    tableauBulletin->setEditTriggers(
-        QAbstractItemView::NoEditTriggers
-    );
-
+    tableauBulletin->setEditTriggers(QAbstractItemView::NoEditTriggers);
     tableauBulletin->setAlternatingRowColors(true);
 
-    QStringList rubriques = {
+    const QStringList rubriques = {
         "Salaire de base",
         "Prime d'ancienneté",
         "Heures supplémentaires",
@@ -419,35 +261,17 @@ QWidget *MainWindow::creerPageBulletin()
     };
 
     for (int i = 0; i < rubriques.size(); ++i) {
-
-        tableauBulletin->setItem(
-            i,
-            0,
-            new QTableWidgetItem(rubriques[i])
-        );
-
-        tableauBulletin->setItem(
-            i,
-            1,
-            new QTableWidgetItem("0")
-        );
+        tableauBulletin->setItem(i, 0, new QTableWidgetItem(rubriques[i]));
+        tableauBulletin->setItem(i, 1, new QTableWidgetItem("0"));
     }
 
     apercuLayout->addWidget(tableauBulletin);
 
-    // =================================================
-    // BOUTONS
-    // =================================================
+    // ---------- Boutons ----------
 
-    btnCalculer = new QPushButton(
-        "Calculer le bulletin"
-    );
-
+    btnCalculer = new QPushButton("Calculer le bulletin");
     btnImprimer = new QPushButton("Imprimer");
-
-    btnReinitialiser = new QPushButton(
-        "Réinitialiser"
-    );
+    btnReinitialiser = new QPushButton("Réinitialiser");
 
     btnCalculer->setStyleSheet(
         "background-color: #168447;"
@@ -464,18 +288,14 @@ QWidget *MainWindow::creerPageBulletin()
     );
 
     QHBoxLayout *actions = new QHBoxLayout;
-
     actions->addWidget(btnReinitialiser);
     actions->addStretch();
     actions->addWidget(btnImprimer);
     actions->addWidget(btnCalculer);
 
-    // =================================================
-    // ORGANISATION FINALE
-    // =================================================
+    // ---------- Organisation finale ----------
 
     QHBoxLayout *contenu = new QHBoxLayout;
-
     contenu->addWidget(calcul, 1);
     contenu->addWidget(apercu, 1);
 
@@ -484,430 +304,37 @@ QWidget *MainWindow::creerPageBulletin()
     layout->addLayout(contenu, 1);
     layout->addLayout(actions);
 
-    // =================================================
-    // CONNEXIONS
-    // =================================================
+    // ---------- Périodes (les combos existent maintenant) ----------
 
-    connect(
-        btnRechercher,
-        &QPushButton::clicked,
-        this,
-        &MainWindow::afficherBulletin
-    );
+    remplirPeriodes(moisBulletin, anneeBulletin);
 
-    connect(
-        btnCalculer,
-        &QPushButton::clicked,
-        this,
-        &MainWindow::afficherBulletin
-    );
+    // ---------- Connexions ----------
 
-    connect(
-        btnReinitialiser,
-        &QPushButton::clicked,
-        this,
-        &MainWindow::reinitialiserBulletin
-    );
+    connect(btnRechercher, &QPushButton::clicked,
+            this, &BulletinDialog::afficherBulletin);
 
-    connect(
-        btnImprimer,
-        &QPushButton::clicked,
-        this,
-        &MainWindow::imprimerBulletin
-    );
+    connect(btnCalculer, &QPushButton::clicked,
+            this, &BulletinDialog::afficherBulletin);
 
-    // Un changement de matricule ou de période invalide
-    // le bulletin précédemment calculé.
-    connect(
-        matriculeEdit,
-        &QLineEdit::textChanged,
-        this,
-        [this]() {
-            setProperty("bulletinValide", false);
-        }
-    );
+    connect(btnReinitialiser, &QPushButton::clicked,
+            this, &BulletinDialog::reinitialiserBulletin);
 
-    connect(
-        moisBulletin,
-        &QComboBox::currentIndexChanged,
-        this,
-        [this](int) {
-            setProperty("bulletinValide", false);
-        }
-    );
+    connect(btnImprimer, &QPushButton::clicked,
+            this, &BulletinDialog::imprimerBulletin);
 
-    connect(
-        anneeBulletin,
-        &QComboBox::currentIndexChanged,
-        this,
-        [this](int) {
-            setProperty("bulletinValide", false);
-        }
-    );
+    // Un changement de matricule ou de période invalide le bulletin calculé.
+    connect(matriculeEdit, &QLineEdit::textChanged,
+            this, [this]() { bulletinValide = false; });
 
-    return page;
+    connect(moisBulletin, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, [this](int) { bulletinValide = false; });
+
+    connect(anneeBulletin, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, [this](int) { bulletinValide = false; });
 }
 
-
-// =====================================================
-// CRÉATION DE LA PAGE MASSE SALARIALE
-// =====================================================
-
-QWidget *MainWindow::creerPageMasse()
+void BulletinDialog::viderResultats()
 {
-    QWidget *page = new QWidget;
-
-    QVBoxLayout *layout = new QVBoxLayout(page);
-
-    layout->setContentsMargins(25, 20, 25, 20);
-    layout->setSpacing(20);
-
-    QLabel *titre = new QLabel(
-        "Masse salariale d'un mois par poste"
-    );
-
-    titre->setStyleSheet(
-        "font-size: 23px;"
-        "font-weight: bold;"
-        "color: #173B70;"
-    );
-
-    // =================================================
-    // SÉLECTION DE LA PÉRIODE
-    // =================================================
-
-    QGroupBox *periode = new QGroupBox(
-        "Période de calcul"
-    );
-
-    QHBoxLayout *periodeLayout = new QHBoxLayout(periode);
-
-    moisMasse = new QComboBox;
-    anneeMasse = new QComboBox;
-
-    btnCalculerMasse = new QPushButton(
-        "Calculer la masse salariale"
-    );
-
-    periodeLayout->addWidget(new QLabel("Mois :"));
-    periodeLayout->addWidget(moisMasse);
-
-    periodeLayout->addWidget(new QLabel("Année :"));
-    periodeLayout->addWidget(anneeMasse);
-
-    periodeLayout->addStretch();
-    periodeLayout->addWidget(btnCalculerMasse);
-
-    // =================================================
-    // TABLEAU DES RÉSULTATS
-    // =================================================
-
-    QGroupBox *resultats = new QGroupBox(
-        "Résultats par poste"
-    );
-
-    QVBoxLayout *resultatsLayout = new QVBoxLayout(resultats);
-
-    tableauMasse = new QTableWidget(0, 4);
-
-    tableauMasse->setHorizontalHeaderLabels({
-        "Poste",
-        "Effectif",
-        "Pointés",
-        "Masse salariale (Ar)"
-    });
-
-    tableauMasse->horizontalHeader()
-        ->setSectionResizeMode(QHeaderView::Stretch);
-
-    tableauMasse->verticalHeader()->hide();
-
-    tableauMasse->setEditTriggers(
-        QAbstractItemView::NoEditTriggers
-    );
-
-    tableauMasse->setAlternatingRowColors(true);
-
-    resultatsLayout->addWidget(tableauMasse);
-
-    // =================================================
-    // TOTAL GÉNÉRAL
-    // =================================================
-
-    totalMasseLabel = new QLabel(
-        "TOTAL GÉNÉRAL : 0 Ar"
-    );
-
-    totalMasseLabel->setAlignment(Qt::AlignRight);
-
-    totalMasseLabel->setStyleSheet(
-        "font-size: 21px;"
-        "font-weight: bold;"
-        "color: #087A35;"
-        "padding: 15px;"
-    );
-
-    layout->addWidget(titre);
-    layout->addWidget(periode);
-    layout->addWidget(resultats, 1);
-    layout->addWidget(totalMasseLabel);
-
-    connect(
-        btnCalculerMasse,
-        &QPushButton::clicked,
-        this,
-        &MainWindow::calculerMasse
-    );
-
-    return page;
-}
-
-
-// =====================================================
-// CALCUL ET AFFICHAGE DU BULLETIN
-// =====================================================
-
-void MainWindow::afficherBulletin()
-{
-    // Invalider le précédent résultat avant le nouveau calcul.
-    setProperty("bulletinValide", false);
-
-    const QString matricule = matriculeEdit->text().trimmed();
-
-    if (matricule.isEmpty()) {
-        QMessageBox::warning(
-            this,
-            "Matricule manquant",
-            "Veuillez saisir le matricule de l'employé."
-        );
-
-        matriculeEdit->setFocus();
-        return;
-    }
-
-    const int mois = moisBulletin->currentIndex() + 1;
-
-    bool anneeValide = false;
-
-    const int annee = anneeBulletin->currentText()
-                          .toInt(&anneeValide);
-
-    if (mois < 1 || mois > 12 || !anneeValide || annee <= 0) {
-        QMessageBox::warning(
-            this,
-            "Période invalide",
-            "Veuillez sélectionner un mois et une année valides."
-        );
-
-        return;
-    }
-
-    // Appel de la fonction métier.
-    Bulletin b = calculerBulletin(matricule, mois, annee);
-
-    if (!b.ok) {
-
-        // Effacer les anciennes informations pour éviter
-        // d'afficher un ancien bulletin comme résultat actuel.
-        nomEdit->clear();
-        posteEdit->clear();
-
-        salaireBaseLabel->setText("0 Ar");
-        primeLabel->setText("0 Ar");
-        heuresSupLabel->setText("0 Ar");
-        brutLabel->setText("0 Ar");
-        retenueAbsenceLabel->setText("0 Ar");
-        retenueSocialeLabel->setText("0 Ar");
-        netLabel->setText("0 Ar");
-
-        for (int i = 0; i < tableauBulletin->rowCount(); ++i) {
-            QTableWidgetItem *item = tableauBulletin->item(i, 1);
-
-            if (item != nullptr) {
-                item->setText("0");
-            }
-        }
-
-        QMessageBox::warning(
-            this,
-            "Erreur de calcul",
-            b.erreur.isEmpty()
-                ? "Impossible de calculer le bulletin."
-                : b.erreur
-        );
-
-        return;
-    }
-
-    // =================================================
-    // INFORMATIONS DE L'EMPLOYÉ
-    // =================================================
-
-    nomEdit->setText(b.nom);
-    posteEdit->setText(b.poste);
-
-    // =================================================
-    // RÉSULTATS FINANCIERS
-    // =================================================
-
-    salaireBaseLabel->setText(
-        montant(b.salaireBase) + " Ar"
-    );
-
-    primeLabel->setText(
-        montant(b.prime) + " Ar"
-    );
-
-    heuresSupLabel->setText(
-        montant(b.montantHeuresSup) + " Ar"
-    );
-
-    brutLabel->setText(
-        montant(b.brut) + " Ar"
-    );
-
-    retenueAbsenceLabel->setText(
-        montant(b.retenueAbsence) + " Ar"
-    );
-
-    retenueSocialeLabel->setText(
-        montant(b.retenueSociale) + " Ar"
-    );
-
-    netLabel->setText(
-        montant(b.net) + " Ar"
-    );
-
-    // =================================================
-    // REMPLISSAGE DU TABLEAU
-    // =================================================
-
-    const double valeurs[] = {
-        b.salaireBase,
-        b.prime,
-        b.montantHeuresSup,
-        b.brut,
-        b.retenueAbsence,
-        b.retenueSociale,
-        b.net
-    };
-
-    for (int i = 0; i < 7; ++i) {
-
-        QTableWidgetItem *item = tableauBulletin->item(i, 1);
-
-        if (item == nullptr) {
-            item = new QTableWidgetItem;
-            tableauBulletin->setItem(i, 1, item);
-        }
-
-        item->setText(montant(valeurs[i]));
-    }
-
-    // Le bulletin devient imprimable uniquement après
-    // un calcul réussi.
-    setProperty("bulletinValide", true);
-
-    QMessageBox::information(
-        this,
-        "Succès",
-        "Le bulletin de paie a été calculé."
-    );
-}
-
-
-// =====================================================
-// CALCUL DE LA MASSE SALARIALE
-// =====================================================
-
-void MainWindow::calculerMasse()
-{
-    const int mois = moisMasse->currentIndex() + 1;
-
-    bool anneeValide = false;
-
-    const int annee = anneeMasse->currentText()
-                          .toInt(&anneeValide);
-
-    if (mois < 1 || mois > 12 || !anneeValide || annee <= 0) {
-        QMessageBox::warning(
-            this,
-            "Période invalide",
-            "Veuillez sélectionner un mois et une année valides."
-        );
-
-        return;
-    }
-
-    double total = 0;
-
-    QList<LignePoste> resultat =
-        masseSalarialeParPoste(mois, annee, total);
-
-    // Supprimer les anciennes lignes.
-    tableauMasse->setRowCount(0);
-
-    for (const LignePoste &ligne : resultat) {
-
-        const int row = tableauMasse->rowCount();
-
-        tableauMasse->insertRow(row);
-
-        tableauMasse->setItem(
-            row,
-            0,
-            new QTableWidgetItem(ligne.libelle)
-        );
-
-        tableauMasse->setItem(
-            row,
-            1,
-            new QTableWidgetItem(
-                QString::number(ligne.effectif)
-            )
-        );
-
-        tableauMasse->setItem(
-            row,
-            2,
-            new QTableWidgetItem(
-                QString::number(ligne.pointes)
-            )
-        );
-
-        tableauMasse->setItem(
-            row,
-            3,
-            new QTableWidgetItem(
-                montant(ligne.masse)
-            )
-        );
-    }
-
-    totalMasseLabel->setText(
-        "TOTAL GÉNÉRAL : " + montant(total) + " Ar"
-    );
-
-    if (resultat.isEmpty()) {
-        QMessageBox::information(
-            this,
-            "Résultat",
-            "Aucun résultat trouvé pour cette période."
-        );
-    }
-}
-
-
-// =====================================================
-// RÉINITIALISATION
-// =====================================================
-
-void MainWindow::reinitialiserBulletin()
-{
-    // Le bulletin n'est plus valide.
-    setProperty("bulletinValide", false);
-
-    matriculeEdit->clear();
     nomEdit->clear();
     posteEdit->clear();
 
@@ -920,33 +347,104 @@ void MainWindow::reinitialiserBulletin()
     netLabel->setText("0 Ar");
 
     for (int i = 0; i < tableauBulletin->rowCount(); ++i) {
-
         QTableWidgetItem *item = tableauBulletin->item(i, 1);
-
         if (item != nullptr) {
             item->setText("0");
         }
     }
+}
+
+void BulletinDialog::afficherBulletin()
+{
+    bulletinValide = false;
+
+    const QString matricule = matriculeEdit->text().trimmed();
+
+    if (matricule.isEmpty()) {
+        QMessageBox::warning(this, "Matricule manquant",
+                             "Veuillez saisir le matricule de l'employé.");
+        matriculeEdit->setFocus();
+        return;
+    }
+
+    const int mois = moisBulletin->currentIndex() + 1;
+
+    bool anneeValide = false;
+    const int annee = anneeBulletin->currentText().toInt(&anneeValide);
+
+    if (mois < 1 || mois > 12 || !anneeValide || annee <= 0) {
+        QMessageBox::warning(this, "Période invalide",
+                             "Veuillez sélectionner un mois et une année valides.");
+        return;
+    }
+
+    Bulletin b = calculerBulletin(matricule, mois, annee);
+
+    if (!b.ok) {
+        viderResultats();
+
+        QMessageBox::warning(
+            this,
+            "Erreur de calcul",
+            b.erreur.isEmpty() ? "Impossible de calculer le bulletin." : b.erreur
+        );
+        return;
+    }
+
+    nomEdit->setText(b.nom);
+    posteEdit->setText(b.poste);
+
+    salaireBaseLabel->setText(montant(b.salaireBase) + " Ar");
+    primeLabel->setText(montant(b.prime) + " Ar");
+    heuresSupLabel->setText(montant(b.montantHeuresSup) + " Ar");
+    brutLabel->setText(montant(b.brut) + " Ar");
+    retenueAbsenceLabel->setText(montant(b.retenueAbsence) + " Ar");
+    retenueSocialeLabel->setText(montant(b.retenueSociale) + " Ar");
+    netLabel->setText(montant(b.net) + " Ar");
+
+    const double valeurs[] = {
+        b.salaireBase,
+        b.prime,
+        b.montantHeuresSup,
+        b.brut,
+        b.retenueAbsence,
+        b.retenueSociale,
+        b.net
+    };
+
+    for (int i = 0; i < 7; ++i) {
+        QTableWidgetItem *item = tableauBulletin->item(i, 1);
+
+        if (item == nullptr) {
+            item = new QTableWidgetItem;
+            tableauBulletin->setItem(i, 1, item);
+        }
+
+        item->setText(montant(valeurs[i]));
+    }
+
+    // Imprimable uniquement après un calcul réussi.
+    bulletinValide = true;
+
+    QMessageBox::information(this, "Succès",
+                             "Le bulletin de paie a été calculé.");
+}
+
+void BulletinDialog::reinitialiserBulletin()
+{
+    bulletinValide = false;
+
+    matriculeEdit->clear();
+    viderResultats();
 
     matriculeEdit->setFocus();
 }
 
-
-// =====================================================
-// IMPRESSION DU BULLETIN
-// =====================================================
-
-void MainWindow::imprimerBulletin()
+void BulletinDialog::imprimerBulletin()
 {
-    // Vérifier qu'un calcul a réellement réussi.
-    if (!property("bulletinValide").toBool()) {
-
-        QMessageBox::warning(
-            this,
-            "Impression",
-            "Veuillez d'abord calculer un bulletin valide."
-        );
-
+    if (!bulletinValide) {
+        QMessageBox::warning(this, "Impression",
+                             "Veuillez d'abord calculer un bulletin valide.");
         return;
     }
 
@@ -960,20 +458,9 @@ void MainWindow::imprimerBulletin()
             <h3 align="center">BULLETIN DE PAIE</h3>
     )";
 
-    // Échapper les valeurs pour éviter qu'un caractère
-    // spécial soit interprété comme du HTML.
-    html += "<p>Matricule : "
-            + matriculeEdit->text().toHtmlEscaped()
-            + "</p>";
-
-    html += "<p>Nom : "
-            + nomEdit->text().toHtmlEscaped()
-            + "</p>";
-
-    html += "<p>Poste : "
-            + posteEdit->text().toHtmlEscaped()
-            + "</p>";
-
+    html += "<p>Matricule : " + matriculeEdit->text().toHtmlEscaped() + "</p>";
+    html += "<p>Nom : " + nomEdit->text().toHtmlEscaped() + "</p>";
+    html += "<p>Poste : " + posteEdit->text().toHtmlEscaped() + "</p>";
     html += "<p>Période : "
             + moisBulletin->currentText().toHtmlEscaped()
             + " / "
@@ -981,10 +468,7 @@ void MainWindow::imprimerBulletin()
             + "</p>";
 
     html += R"(
-        <table border="1"
-               cellspacing="0"
-               cellpadding="7"
-               width="100%">
+        <table border="1" cellspacing="0" cellpadding="7" width="100%">
             <tr>
                 <th>Rubrique</th>
                 <th>Montant (Ar)</th>
@@ -992,7 +476,6 @@ void MainWindow::imprimerBulletin()
     )";
 
     for (int i = 0; i < tableauBulletin->rowCount(); ++i) {
-
         QTableWidgetItem *rubrique = tableauBulletin->item(i, 0);
         QTableWidgetItem *valeur = tableauBulletin->item(i, 1);
 
@@ -1007,22 +490,272 @@ void MainWindow::imprimerBulletin()
                 + "</td></tr>";
     }
 
-    html += R"(
-        </table>
-        </body>
-        </html>
-    )";
+    html += "</table></body></html>";
 
     QTextDocument document;
     document.setHtml(html);
 
     QPrinter printer(QPrinter::HighResolution);
-
     QPrintDialog dialog(&printer, this);
-
     dialog.setWindowTitle("Imprimer le bulletin de paie");
 
     if (dialog.exec() == QDialog::Accepted) {
         document.print(&printer);
     }
+}
+
+
+// =====================================================
+// =====================================================
+//                 MASSE SALARIALE
+// =====================================================
+// =====================================================
+
+MasseSalarialeDialog::MasseSalarialeDialog(QWidget *parent)
+    : QWidget(parent)
+{
+    appliquerStyle(this);
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setContentsMargins(25, 20, 25, 20);
+    layout->setSpacing(20);
+
+    QLabel *titre = new QLabel("Masse salariale d'un mois par poste");
+    titre->setStyleSheet(
+        "font-size: 23px;"
+        "font-weight: bold;"
+        "color: #173B70;"
+    );
+
+    // ---------- Période ----------
+
+    QGroupBox *periode = new QGroupBox("Période de calcul");
+    QHBoxLayout *periodeLayout = new QHBoxLayout(periode);
+
+    moisMasse = new QComboBox;
+    anneeMasse = new QComboBox;
+
+    btnCalculerMasse = new QPushButton("Calculer la masse salariale");
+
+    periodeLayout->addWidget(new QLabel("Mois :"));
+    periodeLayout->addWidget(moisMasse);
+    periodeLayout->addWidget(new QLabel("Année :"));
+    periodeLayout->addWidget(anneeMasse);
+    periodeLayout->addStretch();
+    periodeLayout->addWidget(btnCalculerMasse);
+
+    // ---------- Résultats ----------
+
+    QGroupBox *resultats = new QGroupBox("Résultats par poste");
+    QVBoxLayout *resultatsLayout = new QVBoxLayout(resultats);
+
+    tableauMasse = new QTableWidget(0, 4);
+    tableauMasse->setHorizontalHeaderLabels({
+        "Poste", "Effectif", "Pointés", "Masse salariale (Ar)"
+    });
+    tableauMasse->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    tableauMasse->verticalHeader()->hide();
+    tableauMasse->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    tableauMasse->setAlternatingRowColors(true);
+
+    resultatsLayout->addWidget(tableauMasse);
+
+    // ---------- Total ----------
+
+    totalMasseLabel = new QLabel("TOTAL GÉNÉRAL : 0 Ar");
+    totalMasseLabel->setAlignment(Qt::AlignRight);
+    totalMasseLabel->setStyleSheet(
+        "font-size: 21px;"
+        "font-weight: bold;"
+        "color: #087A35;"
+        "padding: 15px;"
+    );
+
+    layout->addWidget(titre);
+    layout->addWidget(periode);
+    layout->addWidget(resultats, 1);
+    layout->addWidget(totalMasseLabel);
+
+    remplirPeriodes(moisMasse, anneeMasse);
+
+    connect(btnCalculerMasse, &QPushButton::clicked,
+            this, &MasseSalarialeDialog::calculerMasse);
+}
+
+void MasseSalarialeDialog::calculerMasse()
+{
+    const int mois = moisMasse->currentIndex() + 1;
+
+    bool anneeValide = false;
+    const int annee = anneeMasse->currentText().toInt(&anneeValide);
+
+    if (mois < 1 || mois > 12 || !anneeValide || annee <= 0) {
+        QMessageBox::warning(this, "Période invalide",
+                             "Veuillez sélectionner un mois et une année valides.");
+        return;
+    }
+
+    double total = 0;
+
+    QList<LignePoste> resultat = masseSalarialeParPoste(mois, annee, total);
+
+    tableauMasse->setRowCount(0);
+
+    for (const LignePoste &ligne : resultat) {
+        const int row = tableauMasse->rowCount();
+        tableauMasse->insertRow(row);
+
+        tableauMasse->setItem(row, 0, new QTableWidgetItem(ligne.libelle));
+        tableauMasse->setItem(row, 1, new QTableWidgetItem(QString::number(ligne.effectif)));
+        tableauMasse->setItem(row, 2, new QTableWidgetItem(QString::number(ligne.pointes)));
+        tableauMasse->setItem(row, 3, new QTableWidgetItem(montant(ligne.masse)));
+    }
+
+    totalMasseLabel->setText("TOTAL GÉNÉRAL : " + montant(total) + " Ar");
+
+    if (resultat.isEmpty()) {
+        QMessageBox::information(this, "Résultat",
+                                 "Aucun résultat trouvé pour cette période.");
+    }
+}
+
+
+// =====================================================
+// =====================================================
+//                 EMPLOYÉS PAR POSTE
+// =====================================================
+// =====================================================
+
+EmployesParPosteDialog::EmployesParPosteDialog(QWidget *parent)
+    : QWidget(parent)
+{
+    appliquerStyle(this);
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setContentsMargins(25, 20, 25, 20);
+    layout->setSpacing(20);
+
+    QLabel *titre = new QLabel("Liste des employés par poste");
+    titre->setStyleSheet(
+        "font-size: 23px;"
+        "font-weight: bold;"
+        "color: #173B70;"
+    );
+
+    // ---------- Filtre ----------
+
+    QGroupBox *filtre = new QGroupBox("Filtre");
+    QHBoxLayout *filtreLayout = new QHBoxLayout(filtre);
+
+    posteCombo = new QComboBox;
+    effectifLabel = new QLabel("Effectif : 0");
+
+    filtreLayout->addWidget(new QLabel("Poste :"));
+    filtreLayout->addWidget(posteCombo, 1);
+    filtreLayout->addStretch();
+    filtreLayout->addWidget(effectifLabel);
+
+    // ---------- Tableau ----------
+
+    QGroupBox *resultats = new QGroupBox("Employés");
+    QVBoxLayout *resultatsLayout = new QVBoxLayout(resultats);
+
+    tableau = new QTableWidget(0, 5);
+    tableau->setHorizontalHeaderLabels({
+        "Matricule", "Nom", "Poste", "Salaire de base (Ar)", "Date d'embauche"
+    });
+    tableau->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    tableau->verticalHeader()->hide();
+    tableau->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    tableau->setAlternatingRowColors(true);
+
+    resultatsLayout->addWidget(tableau);
+
+    layout->addWidget(titre);
+    layout->addWidget(filtre);
+    layout->addWidget(resultats, 1);
+
+    chargerPostes();
+    chargerEmployes();
+
+    connect(posteCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, [this](int) { chargerEmployes(); });
+}
+
+void EmployesParPosteDialog::chargerPostes()
+{
+    posteCombo->clear();
+    posteCombo->addItem("Tous les postes", QString());
+
+    QSqlDatabase connexion = connexionOuverte();
+    if (!connexion.isOpen()) {
+        return;
+    }
+
+    QSqlQuery query(connexion);
+
+    if (!query.exec("SELECT Libelle FROM poste ORDER BY Libelle ASC")) {
+        qDebug() << "Erreur SQL :" << query.lastError().text();
+        return;
+    }
+
+    while (query.next()) {
+        const QString libelle = query.value("Libelle").toString();
+        posteCombo->addItem(libelle, libelle);
+    }
+}
+
+void EmployesParPosteDialog::chargerEmployes()
+{
+    tableau->setRowCount(0);
+    effectifLabel->setText("Effectif : 0");
+
+    QSqlDatabase connexion = connexionOuverte();
+    if (!connexion.isOpen()) {
+        QMessageBox::warning(this, "Base de données",
+                             "Impossible de se connecter à la base de données.");
+        return;
+    }
+
+    const QString poste = posteCombo->currentData().toString();
+
+    QString sql =
+        "SELECT employe.Matricule, employe.Nom, poste.Libelle, "
+        "poste.SalaireBase, employe.dateEmbauche "
+        "FROM employe "
+        "INNER JOIN poste ON employe.codePoste = poste.codePoste ";
+
+    if (!poste.isEmpty()) {
+        sql += "WHERE poste.Libelle = :poste ";
+    }
+
+    sql += "ORDER BY poste.Libelle ASC, employe.Nom ASC";
+
+    QSqlQuery query(connexion);
+    query.prepare(sql);
+
+    if (!poste.isEmpty()) {
+        query.bindValue(":poste", poste);
+    }
+
+    if (!query.exec()) {
+        qDebug() << "Erreur SQL :" << query.lastError().text();
+        return;
+    }
+
+    int ligne = 0;
+
+    while (query.next()) {
+        tableau->insertRow(ligne);
+
+        tableau->setItem(ligne, 0, new QTableWidgetItem(query.value("Matricule").toString()));
+        tableau->setItem(ligne, 1, new QTableWidgetItem(query.value("Nom").toString()));
+        tableau->setItem(ligne, 2, new QTableWidgetItem(query.value("Libelle").toString()));
+        tableau->setItem(ligne, 3, new QTableWidgetItem(montant(query.value("SalaireBase").toDouble())));
+        tableau->setItem(ligne, 4, new QTableWidgetItem(query.value("dateEmbauche").toString()));
+
+        ++ligne;
+    }
+
+    effectifLabel->setText(QString("Effectif : %1").arg(ligne));
 }

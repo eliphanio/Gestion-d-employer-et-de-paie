@@ -1,38 +1,35 @@
-
 #pragma once
 
-#include <QMainWindow>
-#include <QLineEdit>
-#include <QComboBox>
-#include <QPushButton>
-#include <QLabel>
-#include <QTableWidget>
-#include <QStackedWidget>
+#include <QWidget>
+#include <QString>
 
 #include "paie_calcul.h"
 
-class QWidget;
+class QLineEdit;
+class QComboBox;
+class QPushButton;
+class QLabel;
+class QTableWidget;
 
-class MainWindow : public QMainWindow
+// =====================================================
+// PAGE : BULLETIN DE PAIE
+// =====================================================
+class BulletinDialog : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit BulletinDialog(QWidget *parent = nullptr);
+
+private slots:
+    void afficherBulletin();
+    void reinitialiserBulletin();
+    void imprimerBulletin();
 
 private:
-    // =================================================
-    // NAVIGATION
-    // =================================================
+    void viderResultats();
 
-    QStackedWidget *pages = nullptr;
-
-    QPushButton *btnBulletin = nullptr;
-    QPushButton *btnMasse = nullptr;
-
-    // =================================================
-    // PAGE 1 : BULLETIN DE PAIE
-    // =================================================
+    bool bulletinValide = false;
 
     QLineEdit *matriculeEdit = nullptr;
     QLineEdit *nomEdit = nullptr;
@@ -55,11 +52,22 @@ private:
     QLabel *netLabel = nullptr;
 
     QTableWidget *tableauBulletin = nullptr;
+};
 
-    // =================================================
-    // PAGE 2 : MASSE SALARIALE
-    // =================================================
+// =====================================================
+// PAGE : MASSE SALARIALE
+// =====================================================
+class MasseSalarialeDialog : public QWidget
+{
+    Q_OBJECT
 
+public:
+    explicit MasseSalarialeDialog(QWidget *parent = nullptr);
+
+private slots:
+    void calculerMasse();
+
+private:
     QComboBox *moisMasse = nullptr;
     QComboBox *anneeMasse = nullptr;
 
@@ -67,27 +75,25 @@ private:
 
     QTableWidget *tableauMasse = nullptr;
     QLabel *totalMasseLabel = nullptr;
+};
 
-    // =================================================
-    // CONSTRUCTION DES PAGES
-    // =================================================
+// =====================================================
+// PAGE : EMPLOYÉS PAR POSTE
+// =====================================================
+class EmployesParPosteDialog : public QWidget
+{
+    Q_OBJECT
 
-    QWidget *creerPageBulletin();
-    QWidget *creerPageMasse();
+public:
+    explicit EmployesParPosteDialog(QWidget *parent = nullptr);
 
-    // =================================================
-    // ACTIONS
-    // =================================================
+private slots:
+    void chargerEmployes();
 
-    void afficherBulletin();
-    void calculerMasse();
-    void reinitialiserBulletin();
-    void imprimerBulletin();
+private:
+    void chargerPostes();
 
-    // =================================================
-    // UTILITAIRES
-    // =================================================
-
-    void initialiserPeriodes();
-    QString montant(double valeur) const;
+    QComboBox *posteCombo = nullptr;
+    QTableWidget *tableau = nullptr;
+    QLabel *effectifLabel = nullptr;
 };

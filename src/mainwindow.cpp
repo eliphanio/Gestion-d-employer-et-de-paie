@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "ecrans_paie.h"
+#include "frontend.h"
 #include "QLabel"
 #include "QPushButton"
 #include "QSqlQuery"
