@@ -20,10 +20,11 @@ public:
 
     void affichePoste();
     void afficheEmploye();
+    void affichePosteByEmploye();
+    void nEmploye();
+    void nPoste();
 
 private slots:
-    void on_pushButton_clicked();
-
     void quitClicked();
 
 private:

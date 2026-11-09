@@ -12,8 +12,11 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    nEmploye();
+    nPoste();
     affichePoste();
     afficheEmploye();
+    affichePosteByEmploye();
 
     // Page affichée au démarrage
     ui->stackedWidgetContente->setCurrentIndex(0);
@@ -46,6 +49,19 @@ MainWindow::MainWindow(QWidget *parent)
         afficherPagePaie(new EmployesParPosteDialog);
     });
 
+<<<<<<< HEAD
+=======
+    connect(ui->menuMasseSalariale, &QPushButton::clicked,
+            this, [this]() {
+                MasseSalarialeDialog dlg(this);
+                dlg.exec();
+            });
+    connect(ui->menuEmployeByPoste, &QPushButton::clicked,
+            this, [this]() {
+                ui->stackedWidgetContente->setCurrentWidget(ui->posteEmployePage);
+            });
+
+>>>>>>> main
     connect(ui->menuQuitte, &QPushButton::clicked, this, &MainWindow::quitClicked);
 }
 
@@ -54,17 +70,52 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::nEmploye()
 {
+    db.open();
+    QSqlQuery Query_Count(db);
 
+    Query_Count.prepare(
+        "SELECT COUNT(*) AS nEmploye FROM employe"
+        );
+
+    if (Query_Count.exec() && Query_Count.next()) {
+
+        int nombre = Query_Count.value("nEmploye").toInt();
+
+        ui->labelNombreEmploye->setText(
+            QString("Effectif : %1").arg(nombre)
+            );
+    }
+    db.close();
 }
 
+void MainWindow::nPoste()
+{
+    db.open();
+    QSqlQuery Query_Count(db);
+
+    Query_Count.prepare(
+        "SELECT COUNT(*) AS nPoste FROM poste"
+        );
+
+    if (Query_Count.exec() && Query_Count.next()) {
+
+        int nombre = Query_Count.value("nPoste").toInt();
+
+        ui->labelNombrePoste->setText(
+            QString("Effectif : %1").arg(nombre)
+            );
+    }
+    db.close();
+}
 void MainWindow::afficheEmploye()
 {
 
     db.open();
 
     QSqlQuery Query_Get_Data(db);
+
     Query_Get_Data.prepare("SELECT Matricule, Nom, Adresse, dateEmbauche FROM employe ORDER BY employe.Matricule ASC;");
     if(Query_Get_Data.exec()){
 
@@ -114,6 +165,7 @@ void MainWindow::affichePoste()
     db.close();
 }
 
+<<<<<<< HEAD
 void MainWindow::afficherPagePaie(QWidget *page)
 {
     // supprime la page de paie précédente pour éviter d'en accumuler
@@ -125,6 +177,35 @@ void MainWindow::afficherPagePaie(QWidget *page)
 
     ui->stackedWidgetContente->addWidget(page);
     ui->stackedWidgetContente->setCurrentWidget(page);
+=======
+void MainWindow::affichePosteByEmploye()
+{
+    db.open();
+
+    QSqlQuery Query_Get_Data(db);
+    Query_Get_Data.prepare("SELECT employe.Matricule, employe.Nom, poste.Libelle, poste.SalaireBase, employe.dateEmbauche FROM employe INNER JOIN poste ON employe.codePoste = poste.codePoste ORDER BY poste.Libelle ASC;");
+    if(Query_Get_Data.exec()){
+
+        ui->tableWidgetPosteByEmploye->setRowCount(0);
+        ui->tableWidgetPosteByEmploye->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+        int rowNumber = 0;
+
+        while(Query_Get_Data.next()){
+
+            ui->tableWidgetPosteByEmploye->insertRow(rowNumber);
+            ui->tableWidgetPosteByEmploye->setItem(rowNumber, 0, new QTableWidgetItem(QString(Query_Get_Data.value("Matricule").toString())));
+            ui->tableWidgetPosteByEmploye->setItem(rowNumber, 1, new QTableWidgetItem(QString(Query_Get_Data.value("Nom").toString())));
+            ui->tableWidgetPosteByEmploye->setItem(rowNumber, 2, new QTableWidgetItem(QString(Query_Get_Data.value("Libelle").toString())));
+            ui->tableWidgetPosteByEmploye->setItem(rowNumber, 3, new QTableWidgetItem(QString::number(Query_Get_Data.value("SalaireBase").toInt())));
+            ui->tableWidgetPosteByEmploye->setItem(rowNumber, 4, new QTableWidgetItem(QString(Query_Get_Data.value("dateEmbauche").toString())));
+
+            rowNumber = rowNumber + 1;
+
+        }
+    }
+    db.close();
+>>>>>>> main
 }
 
 void MainWindow::quitClicked()
