@@ -106,7 +106,7 @@ QLabel {
     </item>
    </layout>
   </widget>
-  <widget class="QDialogButtonBox" name="buttonBox">
+  <widget class="QDialogButtonBox" name="buttonBoxUpdatePoste">
    <property name="geometry">
     <rect>
      <x>75</x>

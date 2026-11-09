@@ -6,6 +6,8 @@ addEmployeDialog::addEmployeDialog(QWidget *parent)
     , ui(new Ui::addEmployeDialog)
 {
     ui->setupUi(this);
+    connect(ui->buttonBoxAddEmploye, &QDialogButtonBox::rejected,
+            this, &QDialog::reject);
 }
 
 addEmployeDialog::~addEmployeDialog()

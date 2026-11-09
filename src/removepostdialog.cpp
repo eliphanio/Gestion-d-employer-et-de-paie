@@ -6,6 +6,8 @@ removePostDialog::removePostDialog(QWidget *parent)
     , ui(new Ui::removePostDialog)
 {
     ui->setupUi(this);
+    connect(ui->buttonBoxRemovePoste, &QDialogButtonBox::rejected,
+            this, &QDialog::reject);
 }
 
 removePostDialog::~removePostDialog()

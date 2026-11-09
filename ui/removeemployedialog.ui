@@ -49,7 +49,7 @@ QLabel {
     background-color: transparent;
 }</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
+  <widget class="QDialogButtonBox" name="buttonBoxRemoveEmploye">
    <property name="geometry">
     <rect>
      <x>75</x>

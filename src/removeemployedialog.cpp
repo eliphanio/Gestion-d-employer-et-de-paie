@@ -6,6 +6,8 @@ removeEmployeDialog::removeEmployeDialog(QWidget *parent)
     , ui(new Ui::removeEmployeDialog)
 {
     ui->setupUi(this);
+    connect(ui->buttonBoxRemoveEmploye, &QDialogButtonBox::rejected,
+            this, &QDialog::reject);
 }
 
 removeEmployeDialog::~removeEmployeDialog()
