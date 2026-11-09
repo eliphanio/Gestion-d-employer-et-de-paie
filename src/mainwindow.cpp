@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     affichePoste();
     afficheEmploye();
+    affichePosteByEmploye();
 
     // Page affichée au démarrage
     ui->stackedWidgetContente->setCurrentIndex(0);
@@ -47,9 +48,9 @@ MainWindow::MainWindow(QWidget *parent)
             });
     connect(ui->menuEmployeByPoste, &QPushButton::clicked,
             this, [this]() {
-                EmployesParPosteDialog dlg(this);
-                dlg.exec();
+                ui->stackedWidgetContente->setCurrentWidget(ui->posteEmployePage);
             });
+
     connect(ui->menuQuitte, &QPushButton::clicked, this, &MainWindow::quitClicked);
 }
 
@@ -110,6 +111,34 @@ void MainWindow::affichePoste()
             ui->tableWidgetPoste->setItem(rowNumber, 0, new QTableWidgetItem(QString(Query_Get_Data.value("Libelle").toString())));
             ui->tableWidgetPoste->setItem(rowNumber, 1, new QTableWidgetItem(QString::number(Query_Get_Data.value("SalaireBase").toInt())));
             ui->tableWidgetPoste->setItem(rowNumber, 2, new QTableWidgetItem(QString::number(Query_Get_Data.value("TauxHeureSup").toInt())));
+
+            rowNumber = rowNumber + 1;
+
+        }
+    }
+    db.close();
+}
+
+void MainWindow::affichePosteByEmploye()
+{
+    db.open();
+
+    QSqlQuery Query_Get_Data(db);
+    Query_Get_Data.prepare("SELECT employe.Matricule, employe.Nom, poste.Libelle, poste.SalaireBase, employe.dateEmbauche FROM employe INNER JOIN poste ON employe.codePoste = poste.codePoste ORDER BY poste.Libelle ASC;");
+    if(Query_Get_Data.exec()){
+
+        ui->tableWidgetPosteByEmploye->setRowCount(0);
+        ui->tableWidgetPosteByEmploye->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+        int rowNumber = 0;
+
+        while(Query_Get_Data.next()){
+            ui->tableWidgetPosteByEmploye->insertRow(rowNumber);
+            ui->tableWidgetPosteByEmploye->setItem(rowNumber, 0, new QTableWidgetItem(QString(Query_Get_Data.value("Matricule").toString())));
+            ui->tableWidgetPosteByEmploye->setItem(rowNumber, 1, new QTableWidgetItem(QString(Query_Get_Data.value("Nom").toString())));
+            ui->tableWidgetPosteByEmploye->setItem(rowNumber, 2, new QTableWidgetItem(QString(Query_Get_Data.value("Libelle").toString())));
+            ui->tableWidgetPosteByEmploye->setItem(rowNumber, 3, new QTableWidgetItem(QString::number(Query_Get_Data.value("SalaireBase").toInt())));
+            ui->tableWidgetPosteByEmploye->setItem(rowNumber, 4, new QTableWidgetItem(QString(Query_Get_Data.value("dateEmbauche").toString())));
 
             rowNumber = rowNumber + 1;
 
