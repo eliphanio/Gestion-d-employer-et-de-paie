@@ -12,6 +12,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    nEmploye();
+    nPoste();
     affichePoste();
     afficheEmploye();
     affichePosteByEmploye();
@@ -59,17 +61,52 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::nEmploye()
 {
+    db.open();
+    QSqlQuery Query_Count(db);
 
+    Query_Count.prepare(
+        "SELECT COUNT(*) AS nEmploye FROM employe"
+        );
+
+    if (Query_Count.exec() && Query_Count.next()) {
+
+        int nombre = Query_Count.value("nEmploye").toInt();
+
+        ui->labelNombreEmploye->setText(
+            QString("Effectif : %1").arg(nombre)
+            );
+    }
+    db.close();
 }
 
+void MainWindow::nPoste()
+{
+    db.open();
+    QSqlQuery Query_Count(db);
+
+    Query_Count.prepare(
+        "SELECT COUNT(*) AS nPoste FROM poste"
+        );
+
+    if (Query_Count.exec() && Query_Count.next()) {
+
+        int nombre = Query_Count.value("nPoste").toInt();
+
+        ui->labelNombrePoste->setText(
+            QString("Effectif : %1").arg(nombre)
+            );
+    }
+    db.close();
+}
 void MainWindow::afficheEmploye()
 {
 
     db.open();
 
     QSqlQuery Query_Get_Data(db);
+
     Query_Get_Data.prepare("SELECT Matricule, Nom, Adresse, dateEmbauche FROM employe ORDER BY employe.Matricule ASC;");
     if(Query_Get_Data.exec()){
 
@@ -133,6 +170,7 @@ void MainWindow::affichePosteByEmploye()
         int rowNumber = 0;
 
         while(Query_Get_Data.next()){
+
             ui->tableWidgetPosteByEmploye->insertRow(rowNumber);
             ui->tableWidgetPosteByEmploye->setItem(rowNumber, 0, new QTableWidgetItem(QString(Query_Get_Data.value("Matricule").toString())));
             ui->tableWidgetPosteByEmploye->setItem(rowNumber, 1, new QTableWidgetItem(QString(Query_Get_Data.value("Nom").toString())));
