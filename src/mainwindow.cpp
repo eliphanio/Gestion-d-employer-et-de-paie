@@ -34,22 +34,18 @@ MainWindow::MainWindow(QWidget *parent)
                 ui->stackedWidgetContente->setCurrentWidget(ui->pointagePage);
             });
 
-    connect(ui->menuPaie, &QPushButton::clicked,
-            this, [this]() {
-                BulletinDialog dlg(this);
-                dlg.exec();
-            });
+    connect(ui->menuPaie, &QPushButton::clicked, this, [this]() {
+        afficherPagePaie(new BulletinDialog);
+    });
 
-    connect(ui->menuMasseSalariale, &QPushButton::clicked,
-            this, [this]() {
-                MasseSalarialeDialog dlg(this);
-                dlg.exec();
-            });
-    connect(ui->menuEmployeByPoste, &QPushButton::clicked,
-            this, [this]() {
-                EmployesParPosteDialog dlg(this);
-                dlg.exec();
-            });
+    connect(ui->menuMasseSalariale, &QPushButton::clicked, this, [this]() {
+        afficherPagePaie(new MasseSalarialeDialog);
+    });
+
+    connect(ui->menuEmployeByPoste, &QPushButton::clicked, this, [this]() {
+        afficherPagePaie(new EmployesParPosteDialog);
+    });
+
     connect(ui->menuQuitte, &QPushButton::clicked, this, &MainWindow::quitClicked);
 }
 
@@ -118,8 +114,20 @@ void MainWindow::affichePoste()
     db.close();
 }
 
+void MainWindow::afficherPagePaie(QWidget *page)
+{
+    // supprime la page de paie précédente pour éviter d'en accumuler
+    if (pagePaieCourante) {
+        ui->stackedWidgetContente->removeWidget(pagePaieCourante);
+        pagePaieCourante->deleteLater();
+    }
+    pagePaieCourante = page;
+
+    ui->stackedWidgetContente->addWidget(page);
+    ui->stackedWidgetContente->setCurrentWidget(page);
+}
+
 void MainWindow::quitClicked()
 {
     QApplication::quit();
 }
-
