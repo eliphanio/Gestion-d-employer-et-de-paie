@@ -1,6 +1,6 @@
 #pragma once
-#include <QDialog> 
-#include <QWidget> 
+#include <QDialog>
+#include <QWidget>
 #include <QList>
 
 #include "paie_calcul.h"
@@ -8,6 +8,7 @@
 class QComboBox;
 class QLabel;
 class QPushButton;
+class QStackedWidget;
 class QTableWidget;
 
 
@@ -55,6 +56,10 @@ private:
     QLabel *lblTotal;
     QPushButton *btnGraphique;
 
+    QStackedWidget *pile;
+    QWidget *pageTableau;
+    QWidget *pageGraphique = nullptr;
+
     QList<LignePoste> lignes;
     int moisCalcule = 0;
     int anneeCalculee = 0;
@@ -77,7 +82,7 @@ private:
 };
 
 // ---------- Bonus : histogramme de la masse salariale par poste ----------
-class GraphiqueMasseDialog : public QDialog
+class GraphiqueMasseDialog : public QWidget
 {
     Q_OBJECT
 public:
@@ -85,4 +90,7 @@ public:
         const QList<LignePoste> &lignes, int mois, int annee,
         QWidget *parent = nullptr
     );
+
+signals:
+    void retour();
 };
