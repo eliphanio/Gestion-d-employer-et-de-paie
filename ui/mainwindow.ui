@@ -489,7 +489,7 @@ QPushButton#btnRemoveEmploye{
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,5">
              <item>
-              <widget class="QPushButton" name="pushButton">
+              <widget class="QPushButton" name="btnSearch">
                <property name="text">
                 <string/>
                </property>
@@ -499,7 +499,7 @@ QPushButton#btnRemoveEmploye{
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEdit">
+              <widget class="QLineEdit" name="searchBar">
                <property name="styleSheet">
                 <string notr="true">padding: 4px;
 border: 1px solid;

@@ -23,6 +23,7 @@ public:
     void affichePosteByEmploye();
     void nEmploye();
     void nPoste();
+    void rechercherEmploye();
 
 private slots:
     void quitClicked();

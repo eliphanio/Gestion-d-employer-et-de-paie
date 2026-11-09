@@ -9,9 +9,10 @@ class Database
 public:
     static bool connect();
     static bool initializeSchema();
+    static QSqlDatabase getConnection();
 
 private:
-    QSqlDatabase db;
+    static QSqlDatabase db;
 };
 
 #endif // DATABASE_H

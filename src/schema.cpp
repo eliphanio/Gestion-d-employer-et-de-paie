@@ -7,6 +7,7 @@
 #include <QSqlQuery>
 #include <QDebug>
 
+
 bool Database::initializeSchema()
 {
     QString chemin = QDir(QCoreApplication::applicationDirPath())
@@ -27,7 +28,7 @@ bool Database::initializeSchema()
     const QStringList statements =
         script.split(';', Qt::SkipEmptyParts);
 
-    QSqlQuery query;
+    QSqlQuery query(Database::getConnection());
 
     for (const QString &statement : statements) {
         QString sql = statement.trimmed();
