@@ -28,10 +28,11 @@
    <string>Gestion d'employé et de paie</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="QIcon::ThemeIcon::UserAvailable"/>
+   <iconset theme="QIcon::ThemeIcon::UserAvailable">
+    <normaloff>.</normaloff>.</iconset>
   </property>
   <property name="layoutDirection">
-   <enum>Qt::LayoutDirection::LeftToRight</enum>
+   <enum>Qt::LeftToRight</enum>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>
@@ -58,7 +59,7 @@ color: rgb(63, 63, 63);</string>
       <number>0</number>
      </property>
      <property name="sizeConstraint">
-      <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+      <enum>QLayout::SetDefaultConstraint</enum>
      </property>
      <item>
       <widget class="QWidget" name="sidebar" native="true">
@@ -70,7 +71,7 @@ color: rgb(63, 63, 63);</string>
          <rect>
           <x>10</x>
           <y>10</y>
-          <width>181</width>
+          <width>212</width>
           <height>341</height>
          </rect>
         </property>
@@ -79,6 +80,7 @@ color: rgb(63, 63, 63);</string>
           <widget class="QLabel" name="label">
            <property name="font">
             <font>
+             <weight>75</weight>
              <italic>false</italic>
              <bold>true</bold>
              <underline>false</underline>
@@ -92,7 +94,7 @@ margin: auto;</string>
             <string>MENU PRINCIPAL</string>
            </property>
            <property name="textFormat">
-            <enum>Qt::TextFormat::PlainText</enum>
+            <enum>Qt::PlainText</enum>
            </property>
           </widget>
          </item>
@@ -223,7 +225,7 @@ background: rgb(20, 43, 255);</string>
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>0</y>
+          <y>40</y>
           <width>661</width>
           <height>441</height>
          </rect>
@@ -232,7 +234,7 @@ background: rgb(20, 43, 255);</string>
          <string notr="true"/>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>3</number>
         </property>
         <widget class="QWidget" name="postePage">
          <property name="styleSheet">
@@ -316,7 +318,8 @@ color: blue;</string>
               <string>Ajouté</string>
              </property>
              <property name="icon">
-              <iconset theme="QIcon::ThemeIcon::ListAdd"/>
+              <iconset theme="QIcon::ThemeIcon::ListAdd">
+               <normaloff>.</normaloff>.</iconset>
              </property>
             </widget>
            </item>
@@ -326,7 +329,8 @@ color: blue;</string>
               <string>Modifié</string>
              </property>
              <property name="icon">
-              <iconset theme="QIcon::ThemeIcon::MailMessageNew"/>
+              <iconset theme="QIcon::ThemeIcon::MailMessageNew">
+               <normaloff>.</normaloff>.</iconset>
              </property>
             </widget>
            </item>
@@ -336,7 +340,8 @@ color: blue;</string>
               <string>Supprimé</string>
              </property>
              <property name="icon">
-              <iconset theme="QIcon::ThemeIcon::EditDelete"/>
+              <iconset theme="QIcon::ThemeIcon::EditDelete">
+               <normaloff>.</normaloff>.</iconset>
              </property>
             </widget>
            </item>
@@ -367,10 +372,10 @@ color: blue;</string>
               </size>
              </property>
              <property name="frameShape">
-              <enum>QFrame::Shape::NoFrame</enum>
+              <enum>QFrame::NoFrame</enum>
              </property>
              <property name="editTriggers">
-              <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+              <set>QAbstractItemView::NoEditTriggers</set>
              </property>
              <property name="sortingEnabled">
               <bool>true</bool>
@@ -494,7 +499,8 @@ QPushButton#btnRemoveEmploye{
                 <string/>
                </property>
                <property name="icon">
-                <iconset theme="QIcon::ThemeIcon::EditFind"/>
+                <iconset theme="QIcon::ThemeIcon::EditFind">
+                 <normaloff>.</normaloff>.</iconset>
                </property>
               </widget>
              </item>
@@ -525,7 +531,8 @@ border-radius: 4px;
               <string>Ajouté</string>
              </property>
              <property name="icon">
-              <iconset theme="QIcon::ThemeIcon::ListAdd"/>
+              <iconset theme="QIcon::ThemeIcon::ListAdd">
+               <normaloff>.</normaloff>.</iconset>
              </property>
             </widget>
            </item>
@@ -535,7 +542,8 @@ border-radius: 4px;
               <string>Modifié</string>
              </property>
              <property name="icon">
-              <iconset theme="QIcon::ThemeIcon::MailMessageNew"/>
+              <iconset theme="QIcon::ThemeIcon::MailMessageNew">
+               <normaloff>.</normaloff>.</iconset>
              </property>
             </widget>
            </item>
@@ -545,7 +553,8 @@ border-radius: 4px;
               <string>Supprimé</string>
              </property>
              <property name="icon">
-              <iconset theme="QIcon::ThemeIcon::EditDelete"/>
+              <iconset theme="QIcon::ThemeIcon::EditDelete">
+               <normaloff>.</normaloff>.</iconset>
              </property>
             </widget>
            </item>
@@ -564,10 +573,10 @@ border-radius: 4px;
            <item>
             <widget class="QTableWidget" name="tableWidgetEmploye">
              <property name="frameShape">
-              <enum>QFrame::Shape::NoFrame</enum>
+              <enum>QFrame::NoFrame</enum>
              </property>
              <property name="editTriggers">
-              <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+              <set>QAbstractItemView::NoEditTriggers</set>
              </property>
              <property name="sortingEnabled">
               <bool>true</bool>
@@ -644,6 +653,9 @@ font-size: 15px;</string>
             <width>49</width>
             <height>16</height>
            </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color:red;</string>
           </property>
           <property name="text">
            <string>paie</string>
@@ -735,7 +747,7 @@ color: blue;</string>
            <item>
             <widget class="QTableWidget" name="tableWidgetPosteByEmploye">
              <property name="editTriggers">
-              <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+              <set>QAbstractItemView::NoEditTriggers</set>
              </property>
              <property name="sortingEnabled">
               <bool>true</bool>

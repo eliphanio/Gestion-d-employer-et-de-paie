@@ -64,7 +64,7 @@ Bulletin calculerBulletin(const QString &matricule, int mois, int annee)
     // Depend de : 1.2 (q, colonne 3)
     // Produit   : b.salaireBase
     bool salaireValide = false;
-    b.salaireBase = q.value(3).toDouble();      // <-- A CORRIGER (voir note plus bas)
+    b.salaireBase = q.value(3).toDouble(&salaireValide);     // <-- A CORRIGER (voir note plus bas)
 
     if (!salaireValide || !std::isfinite(b.salaireBase)
         || b.salaireBase < 0) {

@@ -1,11 +1,12 @@
 #include "mainwindow.h"
+#include "frontend.h"
 
 #include "database.h"
 #include <QMessageBox>
 
 #include <QApplication>
 #include <QLocale>
-#include <QLabel>
+#include <QStringList>
 #include <QTranslator>
 
 int main(int argc, char *argv[])
@@ -43,7 +44,9 @@ int main(int argc, char *argv[])
         }
     }
 
-    MainWindow w;
-    w.show();
+
+    MainWindow window;
+    window.show();
+
     return QApplication::exec();
 }
