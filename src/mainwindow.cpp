@@ -201,6 +201,70 @@ void MainWindow::afficherPagePaie(QWidget *page)
     ui->stackedWidgetContente->setCurrentWidget(page);
 }
 
+
+void MainWindow::rechercherEmploye()
+{
+    QString recherche = ui->searchBar->text().trimmed();
+
+    // Récupérer la connexion partagée
+    QSqlDatabase connexion = Database::getConnection();
+
+    // Vérifier la connexion
+    if (!connexion.isOpen()) {
+        qDebug() << "Connexion MySQL fermée.";
+
+        if (!Database::connect()) {
+            qDebug() << "Impossible de se connecter à MySQL.";
+            return;
+        }
+
+        connexion = Database::getConnection();
+    }
+
+    QSqlQuery query(connexion);
+
+    query.prepare(
+        "SELECT Matricule, Nom, Adresse, dateEmbauche "
+        "FROM employe "
+        "WHERE Nom LIKE :recherche "
+        "OR Matricule LIKE :recherche "
+        "ORDER BY Matricule ASC"
+        );
+
+    query.bindValue(":recherche", "%" + recherche + "%");
+
+    if (!query.exec()) {
+        qDebug() << "Erreur SQL :" << query.lastError().text();
+        return;
+    }
+
+    ui->tableWidgetEmploye->setSortingEnabled(false);
+    ui->tableWidgetEmploye->setRowCount(0);
+
+    int ligne = 0;
+
+    while (query.next()) {
+        ui->tableWidgetEmploye->insertRow(ligne);
+
+        ui->tableWidgetEmploye->setItem(ligne, 0,
+                                        new QTableWidgetItem(query.value("Matricule").toString()));
+
+        ui->tableWidgetEmploye->setItem(ligne, 1,
+                                        new QTableWidgetItem(query.value("Nom").toString()));
+
+        ui->tableWidgetEmploye->setItem(ligne, 2,
+                                        new QTableWidgetItem(query.value("Adresse").toString()));
+
+        ui->tableWidgetEmploye->setItem(ligne, 3,
+                                        new QTableWidgetItem(query.value("dateEmbauche").toString()));
+
+        ligne++;
+    }
+
+    ui->tableWidgetEmploye->setSortingEnabled(true);
+}
+
+
 void MainWindow::quitClicked()
 {
     QApplication::quit();
