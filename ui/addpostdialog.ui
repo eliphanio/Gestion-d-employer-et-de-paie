@@ -11,40 +11,93 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Ajoutez un employé</string>
+   <string>Ajouté</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QDialog{
-	background-color: white;
+   <string notr="true">QDialog {
+    background-color: #FFFFFF;
 }
 
-QLineEdit{
-	background: white;
-	border: 1px solid;
-	border-radius: 4px;
+QLineEdit, QComboBox {
+    border: 1px solid #D1D5DB;
+    background-color: #F9FAFB;
+    border-radius: 6px;
+    padding: 4px 10px;
+    color: #1F2937;
+    font-size: 13px;
+    selection-background-color: #2563EB;
+}
+
+QLineEdit:hover, QComboBox:hover {
+    border: 1px solid #94A3B8;
+}
+
+QLineEdit:focus, QComboBox:focus {
+    border: 1px solid #2563EB;
+    background-color: #FFFFFF;
+}
+
+QLineEdit:disabled, QComboBox:disabled {
+    background-color: #F3F4F6;
+    color: #9CA3AF;
+    border: 1px solid #E5E7EB;
+}
+
+QLabel {
+    color: #374151;
+    font-size: 13px;
+    background-color: transparent;
 }</string>
   </property>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>10</y>
-     <width>151</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Ajoutez un nouveau poste</string>
-   </property>
-  </widget>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>210</x>
-     <y>260</y>
-     <width>166</width>
-     <height>24</height>
+     <x>85</x>
+     <y>253</y>
+     <width>291</width>
+     <height>31</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QDialogButtonBox {
+    background-color: transparent;
+    border: none;
+    padding: 10px 0px;
+}
+
+QDialogButtonBox QPushButton {
+    min-width: 100px;
+    min-height: 20px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+}
+
+/* Bouton OK */
+QDialogButtonBox QPushButton[text=&quot;OK&quot;] {
+    background-color: #2563EB;
+    color: white;
+}
+
+QDialogButtonBox QPushButton[text=&quot;OK&quot;]:hover {
+    background-color: #1D4ED8;
+}
+
+/* Bouton Annuler */
+QDialogButtonBox QPushButton[text=&quot;Cancel&quot;] {
+    background-color: #E5E7EB;
+    color: #374151;
+}
+
+QDialogButtonBox QPushButton[text=&quot;Cancel&quot;]:hover {
+    background-color: #D1D5DB;
+}
+
+QDialogButtonBox QPushButton:pressed {
+    padding-top: 10px;
+}</string>
    </property>
    <property name="standardButtons">
     <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
@@ -77,7 +130,11 @@ QLineEdit{
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QLineEdit" name="nomDuPosteLineEdit"/>
+     <widget class="QLineEdit" name="nomDuPosteLineEdit">
+      <property name="placeholderText">
+       <string>Développeur</string>
+      </property>
+     </widget>
     </item>
     <item row="1" column="0">
      <widget class="QLabel" name="heureSupLabel">
@@ -87,7 +144,11 @@ QLineEdit{
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QLineEdit" name="tauxDeHeureSupLineEdit"/>
+     <widget class="QLineEdit" name="tauxDeHeureSupLineEdit">
+      <property name="placeholderText">
+       <string>500000</string>
+      </property>
+     </widget>
     </item>
     <item row="2" column="0">
      <widget class="QLabel" name="salaireLabel">
@@ -97,9 +158,31 @@ QLineEdit{
      </widget>
     </item>
     <item row="2" column="1">
-     <widget class="QLineEdit" name="salaireDeBaseLineEdit"/>
+     <widget class="QLineEdit" name="salaireDeBaseLineEdit">
+      <property name="placeholderText">
+       <string>5000</string>
+      </property>
+     </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>10</y>
+     <width>211</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: blue;
+font-weight: bold;
+font-size: 14px;</string>
+   </property>
+   <property name="text">
+    <string>Ajouté un poste</string>
+   </property>
   </widget>
  </widget>
  <resources/>
