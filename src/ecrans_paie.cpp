@@ -14,6 +14,7 @@
 #include <QPdfWriter>
 #include <QPushButton>
 #include <QSqlQuery>
+#include <QStackedWidget>
 #include <QTableWidget>
 #include <QTextDocument>
 #include <QVBoxLayout>
@@ -87,9 +88,6 @@ static bool estGras(int i) { return i == 3 || i == 6; }   // BRUT et NET
 // ============================================================
 BulletinDialog::BulletinDialog(QWidget *parent) : QWidget(parent)
 {
-    setWindowTitle("Edition d'un bulletin de paie");
-    resize(560, 520);
-
     cbMatricule = new QComboBox;
     QSqlQuery q("SELECT Matricule, Nom FROM EMPLOYE ORDER BY Nom");
     while (q.next())
@@ -222,9 +220,6 @@ void BulletinDialog::exporterPdf()
 // ============================================================
 MasseSalarialeDialog::MasseSalarialeDialog(QWidget *parent) : QWidget(parent)
 {
-    setWindowTitle("Masse salariale d'un mois par poste");
-    resize(600, 450);
-
     cbMois = new QComboBox;
     remplirMois(cbMois);
     cbAnnee = new QComboBox;
@@ -252,10 +247,19 @@ MasseSalarialeDialog::MasseSalarialeDialog(QWidget *parent) : QWidget(parent)
     haut->addWidget(btnCalculer);
     haut->addWidget(btnGraphique);
 
-    auto *layout = new QVBoxLayout(this);
+    // Page du tableau, placée dans une pile avec la page du graphique
+    pageTableau = new QWidget;
+    auto *layout = new QVBoxLayout(pageTableau);
     layout->addLayout(haut);
     layout->addWidget(table);
     layout->addWidget(lblTotal);
+
+    pile = new QStackedWidget;
+    pile->addWidget(pageTableau);
+
+    auto *principal = new QVBoxLayout(this);
+    principal->setContentsMargins(0, 0, 0, 0);
+    principal->addWidget(pile);
 
     connect(btnCalculer, &QPushButton::clicked, this, &MasseSalarialeDialog::calculer);
     connect(btnGraphique, &QPushButton::clicked, this, &MasseSalarialeDialog::ouvrirGraphique);
@@ -283,8 +287,19 @@ void MasseSalarialeDialog::calculer()
 
 void MasseSalarialeDialog::ouvrirGraphique()
 {
-    GraphiqueMasseDialog dlg(lignes, moisCalcule, anneeCalculee, this);
-    dlg.exec();
+    if (pageGraphique) {
+        pile->removeWidget(pageGraphique);
+        pageGraphique->deleteLater();
+    }
+
+    auto *g = new GraphiqueMasseDialog(lignes, moisCalcule, anneeCalculee);
+    pageGraphique = g;
+    connect(g, &GraphiqueMasseDialog::retour, this, [this]() {
+        pile->setCurrentWidget(pageTableau);
+    });
+
+    pile->addWidget(g);
+    pile->setCurrentWidget(g);
 }
 
 // ============================================================
@@ -292,9 +307,6 @@ void MasseSalarialeDialog::ouvrirGraphique()
 // ============================================================
 EmployesParPosteDialog::EmployesParPosteDialog(QWidget *parent) : QWidget(parent)
 {
-    setWindowTitle("Employés par poste");
-    resize(700, 450);
-
     cbPoste = new QComboBox;
     int totalEmployes = 0;
     QSqlQuery q("SELECT p.codePoste, p.Libelle, COUNT(e.Matricule) "
@@ -366,11 +378,8 @@ void EmployesParPosteDialog::charger()
 //  Bonus : histogramme
 // ============================================================
 GraphiqueMasseDialog::GraphiqueMasseDialog(const QList<LignePoste> &lignes, int mois, int annee,
-                                           QWidget *parent) : QDialog(parent)
+                                           QWidget *parent) : QWidget(parent)
 {
-    setWindowTitle("Histogramme de la masse salariale");
-    resize(700, 450);
-
     auto *set = new QBarSet("Masse salariale nette");
     QStringList categories;
     double max = 0;
@@ -402,6 +411,10 @@ GraphiqueMasseDialog::GraphiqueMasseDialog(const QList<LignePoste> &lignes, int 
     auto *vue = new QChartView(chart);
     vue->setRenderHint(QPainter::Antialiasing);
 
+    auto *btnRetour = new QPushButton("← Retour");
+    connect(btnRetour, &QPushButton::clicked, this, &GraphiqueMasseDialog::retour);
+
     auto *layout = new QVBoxLayout(this);
+    layout->addWidget(btnRetour, 0, Qt::AlignLeft);
     layout->addWidget(vue);
 }
