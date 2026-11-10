@@ -69,13 +69,6 @@ QLabel {
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
-     <widget class="QComboBox" name="matriculeComboBox">
-      <property name="placeholderText">
-       <string>EMP001</string>
-      </property>
-     </widget>
-    </item>
     <item row="1" column="0">
      <widget class="QLabel" name="nouvelleAdresseLabel">
       <property name="text">
@@ -87,6 +80,13 @@ QLabel {
      <widget class="QLineEdit" name="nouvelleAdresseLineEdit">
       <property name="placeholderText">
        <string>Ampitakely, Fianarantsoa</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="matriculeLineEdit">
+      <property name="placeholderText">
+       <string>EMP001</string>
       </property>
      </widget>
     </item>

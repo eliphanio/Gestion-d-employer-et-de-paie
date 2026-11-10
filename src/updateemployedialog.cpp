@@ -1,6 +1,5 @@
 #include "updateemployedialog.h"
 #include "ui_updateemployedialog.h"
-#include "comboboxhelper.h"
 #include "QMessageBox"
 #include "database.h"
 #include "QSqlQuery"
@@ -11,7 +10,7 @@ updateEmployeDialog::updateEmployeDialog(QWidget *parent)
     , ui(new Ui::updateEmployeDialog)
 {
     ui->setupUi(this);
-    ComboBoxHelper::chargerMatricules(ui->matriculeComboBox);
+
     connect(ui->buttonBoxUpdateEmploye, &QDialogButtonBox::rejected,
             this, &QDialog::reject);
 }
@@ -23,7 +22,7 @@ updateEmployeDialog::~updateEmployeDialog()
 
 void updateEmployeDialog::rechercherEmploye()
 {
-    QString matricule = ui->matriculeComboBox->currentData().toString();
+    QString matricule = ui->matriculeLineEdit->text().trimmed();
 
     if (matricule.isEmpty()) {
         QMessageBox::warning(this, "Attention",
@@ -61,7 +60,7 @@ void updateEmployeDialog::rechercherEmploye()
 
 void updateEmployeDialog::on_buttonBoxUpdateEmploye_accepted()
 {
-        QString matricule = ui->matriculeComboBox->currentData().toString();
+        QString matricule = ui->matriculeLineEdit->text().trimmed();
 
         QString adresse = ui->nouvelleAdresseLineEdit->text().trimmed();
 
