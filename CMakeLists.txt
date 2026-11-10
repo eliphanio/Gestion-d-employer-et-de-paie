@@ -43,6 +43,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/schema.cpp
         include/addpostdialog.h src/addpostdialog.cpp ui/addpostdialog.ui
         include/removepostdialog.h src/removepostdialog.cpp ui/removepostdialog.ui
+        include/updatepostedialog.h src/updatepostedialog.cpp ui/updatepostedialog.ui
+        include/addemployedialog.h src/addemployedialog.cpp ui/addemployedialog.ui
+        include/updateemployedialog.h src/updateemployedialog.cpp ui/updateemployedialog.ui
+        include/removeemployedialog.h src/removeemployedialog.cpp ui/removeemployedialog.ui
         include/paie_calcul.h src/paie_calcul.cpp
         include/frontend.h src/frontend.cpp
 
