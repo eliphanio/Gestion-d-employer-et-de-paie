@@ -4,7 +4,7 @@
 
 // Résultat du calcul d'un bulletin de paie
 struct Bulletin {
-    bool ok = false;          // false => voir "erreur"
+    bool ok = false;      
     QString erreur;
 
     QString matricule, nom, poste;
@@ -22,9 +22,9 @@ struct Bulletin {
 // Une ligne de la masse salariale (un poste)
 struct LignePoste {
     QString libelle;
-    int effectif = 0;   // nombre d'employés du poste
-    int pointes = 0;    // employés ayant un pointage ce mois-là
-    double masse = 0;   // somme des nets
+    int effectif = 0; 
+    int pointes = 0;   
+    double masse = 0;  
 };
 
 // Calcule le bulletin d'un employé pour un mois/année (connexion MySQL par défaut)

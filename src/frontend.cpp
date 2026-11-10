@@ -26,9 +26,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 
-// =====================================================
 // OUTILS COMMUNS (visibles uniquement dans ce fichier)
-// =====================================================
 
 namespace {
 
@@ -152,12 +150,7 @@ QSqlDatabase connexionOuverte()
 
 } // namespace
 
-
-// =====================================================
-// =====================================================
-//                 BULLETIN DE PAIE
-// =====================================================
-// =====================================================
+//BULLETIN DE PAIE
 
 BulletinDialog::BulletinDialog(QWidget *parent)
     : QWidget(parent)
@@ -363,9 +356,7 @@ void BulletinDialog::viderResultats()
     }
 }
 
-// -----------------------------------------------------
 // ÉTAPE 1 : recherche de l'employé (EMPLOYE + POSTE)
-// -----------------------------------------------------
 void BulletinDialog::rechercherInfosEmploye()
 {
     bulletinValide = false;
@@ -410,9 +401,7 @@ void BulletinDialog::rechercherInfosEmploye()
     posteEdit->setText(q.value("Libelle").toString());
 }
 
-// -----------------------------------------------------
 // ÉTAPES 2 ET 3 : calcul du brut puis du net
-// -----------------------------------------------------
 void BulletinDialog::afficherBulletin()
 {
     bulletinValide = false;
@@ -560,12 +549,7 @@ void BulletinDialog::imprimerBulletin()
     }
 }
 
-
-// =====================================================
-// =====================================================
-//                 MASSE SALARIALE
-// =====================================================
-// =====================================================
+// MASSE SALARIALE
 
 MasseSalarialeDialog::MasseSalarialeDialog(QWidget *parent)
     : QWidget(parent)
@@ -674,13 +658,7 @@ void MasseSalarialeDialog::calculerMasse()
     }
 }
 
-
-// =====================================================
-// =====================================================
-//                 EMPLOYÉS PAR POSTE
-// =====================================================
-// =====================================================
-
+//EMPLOYÉS PAR POSTE
 EmployesParPosteDialog::EmployesParPosteDialog(QWidget *parent)
     : QWidget(parent)
 {

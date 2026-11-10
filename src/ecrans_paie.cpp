@@ -18,19 +18,14 @@
 #include <QTableWidget>
 #include <QTextDocument>
 #include <QVBoxLayout>
-
-// Qt Charts (module "charts" à activer dans le .pro / CMakeLists)
 #include <QtCharts/QBarCategoryAxis>
 #include <QtCharts/QBarSeries>
 #include <QtCharts/QBarSet>
 #include <QtCharts/QChart>
 #include <QtCharts/QChartView>
 #include <QtCharts/QValueAxis>
-// Si vous utilisez Qt 5, ajouter aussi : QT_CHARTS_USE_NAMESPACE
 
-// ============================================================
 //  Outils communs
-// ============================================================
 static QString fmt(double v)
 {
     return QLocale(QLocale::French).toString(v, 'f', 0);
@@ -55,8 +50,8 @@ static void remplirAnnees(QComboBox *cb)
 }
 
 static QTableWidgetItem *cellule(const QString &texte,
-                                 Qt::Alignment align = Qt::AlignLeft | Qt::AlignVCenter,
-                                 bool gras = false)
+    Qt::Alignment align = Qt::AlignLeft | Qt::AlignVCenter,
+    bool gras = false)
 {
     auto *item = new QTableWidgetItem(texte);
     item->setTextAlignment(align);
@@ -83,9 +78,7 @@ static QList<QPair<QString, double>> rubriques(const Bulletin &b)
 }
 static bool estGras(int i) { return i == 3 || i == 6; }   // BRUT et NET
 
-// ============================================================
 //  Menu 4 : bulletin de paie
-// ============================================================
 BulletinDialog::BulletinDialog(QWidget *parent) : QWidget(parent)
 {
     cbMatricule = new QComboBox;
@@ -157,8 +150,8 @@ void BulletinDialog::afficher()
     dernierAnnee = annee;
 
     lblInfo->setText(QString("MATRICULE : %1     NOM : %2\nPOSTE : %3     PERIODE : %4 / %5")
-                         .arg(b.matricule, b.nom, b.poste)
-                         .arg(mois).arg(annee));
+        .arg(b.matricule, b.nom, b.poste)
+        .arg(mois).arg(annee));
 
     const auto lignes = rubriques(b);
     table->setRowCount(lignes.size());
@@ -172,21 +165,22 @@ void BulletinDialog::afficher()
 QString BulletinDialog::htmlBulletin() const
 {
     const Bulletin &b = dernier;
-    QString h = QString("<h2 align='center'>BULLETIN DE PAIE</h2>"
-                        "<p>MATRICULE : %1 &nbsp;&nbsp;&nbsp; NOM : %2<br>"
-                        "POSTE : %3 &nbsp;&nbsp;&nbsp; PERIODE : %4 / %5</p>"
-                        "<table border='1' cellspacing='0' cellpadding='6' width='100%'>"
-                        "<tr><th align='left'>RUBRIQUE</th><th align='right'>MONTANT</th></tr>")
-                    .arg(b.matricule.toHtmlEscaped(), b.nom.toHtmlEscaped(), b.poste.toHtmlEscaped())
-                    .arg(dernierMois).arg(dernierAnnee);
+    QString h = QString(
+        "<h2 align='center'>BULLETIN DE PAIE</h2>"
+        "<p>MATRICULE : %1 &nbsp;&nbsp;&nbsp; NOM : %2<br>"
+        "POSTE : %3 &nbsp;&nbsp;&nbsp; PERIODE : %4 / %5</p>"
+        "<table border='1' cellspacing='0' cellpadding='6' width='100%'>"
+        "<tr><th align='left'>RUBRIQUE</th><th align='right'>MONTANT</th></tr>")
+        .arg(b.matricule.toHtmlEscaped(), b.nom.toHtmlEscaped(), b.poste.toHtmlEscaped())
+        .arg(dernierMois).arg(dernierAnnee);
 
     const auto lignes = rubriques(b);
     for (int i = 0; i < lignes.size(); ++i) {
         const QString nom = lignes[i].first.toHtmlEscaped();
         const QString val = fmt(lignes[i].second);
         h += estGras(i)
-                 ? QString("<tr><td><b>%1</b></td><td align='right'><b>%2</b></td></tr>").arg(nom, val)
-                 : QString("<tr><td>%1</td><td align='right'>%2</td></tr>").arg(nom, val);
+            ? QString("<tr><td><b>%1</b></td><td align='right'><b>%2</b></td></tr>").arg(nom, val)
+            : QString("<tr><td>%1</td><td align='right'>%2</td></tr>").arg(nom, val);
     }
     h += "</table>";
     h += QString("<h3>NET A PAYER : %1 Ar</h3>").arg(fmt(b.net));
@@ -215,9 +209,7 @@ void BulletinDialog::exporterPdf()
     QMessageBox::information(this, "Export PDF", "Bulletin exporté :\n" + chemin);
 }
 
-// ============================================================
 //  Menu 5 : masse salariale par poste
-// ============================================================
 MasseSalarialeDialog::MasseSalarialeDialog(QWidget *parent) : QWidget(parent)
 {
     cbMois = new QComboBox;
@@ -302,9 +294,7 @@ void MasseSalarialeDialog::ouvrirGraphique()
     pile->setCurrentWidget(g);
 }
 
-// ============================================================
 //  Menu 6 : employés par poste
-// ============================================================
 EmployesParPosteDialog::EmployesParPosteDialog(QWidget *parent) : QWidget(parent)
 {
     cbPoste = new QComboBox;
@@ -374,11 +364,9 @@ void EmployesParPosteDialog::charger()
     lblEffectif->setText(QString("EFFECTIF : %1").arg(r));
 }
 
-// ============================================================
-//  Bonus : histogramme
-// ============================================================
+//histogramme
 GraphiqueMasseDialog::GraphiqueMasseDialog(const QList<LignePoste> &lignes, int mois, int annee,
-                                           QWidget *parent) : QWidget(parent)
+    QWidget *parent) : QWidget(parent)
 {
     auto *set = new QBarSet("Masse salariale nette");
     QStringList categories;
