@@ -694,7 +694,7 @@ void EmployesParPosteDialog::chargerPostes()
 
     QSqlQuery query(connexion);
 
-    if (!query.exec("SELECT Libelle FROM poste ORDER BY Libelle ASC")) {
+    if (!query.exec("SELECT Libelle FROM POSTE ORDER BY Libelle ASC")) {
         qDebug() << "Erreur SQL :" << query.lastError().text();
         return;
     }
@@ -720,16 +720,16 @@ void EmployesParPosteDialog::chargerEmployes()
     const QString poste = posteCombo->currentData().toString();
 
     QString sql =
-        "SELECT employe.Matricule, employe.Nom, poste.Libelle, "
-        "poste.SalaireBase, employe.dateEmbauche "
-        "FROM employe "
-        "INNER JOIN poste ON employe.codePoste = poste.codePoste ";
+        "SELECT EMPLOYE.Matricule, EMPLOYE.Nom, POSTE.Libelle, "
+        "POSTE.SalaireBase, EMPLOYE.dateEmbauche "
+        "FROM EMPLOYE "
+        "INNER JOIN POSTE ON EMPLOYE.codePoste = POSTE.codePoste ";
 
     if (!poste.isEmpty()) {
-        sql += "WHERE poste.Libelle = :poste ";
+        sql += "WHERE POSTE.Libelle = :poste ";
     }
 
-    sql += "ORDER BY poste.Libelle ASC, employe.Nom ASC";
+    sql += "ORDER BY POSTE.Libelle ASC, EMPLOYE.Nom ASC";
 
     QSqlQuery query(connexion);
     query.prepare(sql);

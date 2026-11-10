@@ -84,6 +84,8 @@ target_link_libraries(GestionEmployer PRIVATE
         Qt${QT_VERSION_MAJOR}::PrintSupport
         )
 
+target_compile_definitions(GestionEmployer PRIVATE PROJECT_DIR="${CMAKE_SOURCE_DIR}")
+
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
