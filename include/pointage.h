@@ -1,23 +1,7 @@
 #ifndef POINTAGE_H
 #define POINTAGE_H
 
-/*
- * ======================================================================
- *  PROJET 4 : GESTION DES EMPLOYES ET DE LA PAIE
- *  Module   : POINTAGE   (table POINTAGE(Matricule, Mois, Annee,
- *                                         HeuresSup, JoursAbsence))
- * ----------------------------------------------------------------------
- *  PointageWidget est une "page" complete (formulaire + tableau) qui
- *  peut etre ajoutee dans le QStackedWidget de la fenetre principale.
- *
- *  Fonctionnalites (conformes au cahier des charges) :
- *   - listage des pointages (avec le nom de l'employe via une jointure)
- *   - ajout, modification, suppression
- *   - listes deroulantes : matricule, mois (1 a 12), annee
- *   - controles de saisie et messages clairs
- *   - recherche par matricule ou par nom
- * ======================================================================
- */
+
 
 #include <QWidget>
 
