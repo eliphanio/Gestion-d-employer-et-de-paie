@@ -1,6 +1,11 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "frontend.h"
+#include "pointage.h"
+#include "QLabel"
+#include "QPushButton"
+#include "QSqlQuery"
+#include <QSqlError>
 #include "addpostdialog.h"
 #include "removepostdialog.h"
 #include "updatepostedialog.h"
@@ -61,9 +66,10 @@ MainWindow::MainWindow(QWidget *parent)
         ui->stackedWidgetContente->setCurrentWidget(ui->employePage);
     });
 
-    connect(ui->menuPointage, &QPushButton::clicked, this, [this]() {
-        ui->stackedWidgetContente->setCurrentWidget(ui->pointagePage);
-    });
+    connect(ui->menuPointage, &QPushButton::clicked,
+            this, [this]() {
+            afficherPagePaie(new PointageWidget);
+        });
 
     connect(ui->menuPaie, &QPushButton::clicked, this, [this]() {
         afficherPagePaie(new BulletinDialog);
@@ -251,35 +257,61 @@ void MainWindow::quitClicked()
 void MainWindow::on_btnAddPost_clicked()
 {
     addPostDialog dialog(this);
-    dialog.exec();
+    if (dialog.exec() == QDialog::Accepted) {
+        affichePoste();
+        affichePosteByEmploye();
+        nPoste();
+    }
 }
 
 void MainWindow::on_btnRemovePost_clicked()
 {
     removePostDialog dialog(this);
-    dialog.exec();
+    if (dialog.exec() == QDialog::Accepted) {
+        affichePoste();
+        affichePosteByEmploye();
+        nPoste();
+    }
 }
 
 void MainWindow::on_btnUpdatePost_clicked()
 {
     updatePosteDialog dialog(this);
-    dialog.exec();
+    if (dialog.exec() == QDialog::Accepted) {
+        affichePoste();
+        affichePosteByEmploye();
+        nPoste();
+    }
 }
 
 void MainWindow::on_btnAddEmploye_clicked()
 {
     addEmployeDialog dialog(this);
     dialog.exec();
+    if (dialog.exec() == QDialog::Accepted) {
+        afficheEmploye();
+        affichePosteByEmploye();
+        nEmploye();
+    }
 }
 
 void MainWindow::on_btnUpdateEmploye_clicked()
 {
     updateEmployeDialog dialog(this);
-    dialog.exec();
+    if (dialog.exec() == QDialog::Accepted) {
+        afficheEmploye();
+        affichePosteByEmploye();
+        nEmploye();
+    }
 }
 
 void MainWindow::on_btnRemoveEmploye_clicked()
 {
     removeEmployeDialog dialog(this);
-    dialog.exec();
+    if (dialog.exec() == QDialog::Accepted) {
+        afficheEmploye();
+        affichePosteByEmploye();
+        nEmploye();
+    }
 }
+

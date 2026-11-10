@@ -15,6 +15,9 @@ public:
     explicit addPostDialog(QWidget *parent = nullptr);
     ~addPostDialog();
 
+private slots:
+    void on_buttonBoxAddPoste_accepted();
+
 private:
     Ui::addPostDialog *ui;
 };

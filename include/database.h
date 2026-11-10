@@ -10,6 +10,8 @@ public:
     static bool connect();
     static bool initializeSchema();
     static QSqlDatabase getConnection();
+    static QString genererMatricule();
+
 
 private:
     static QSqlDatabase db;
