@@ -11,9 +11,7 @@ class QPushButton;
 class QLabel;
 class QTableWidget;
 
-// =====================================================
 // PAGE : BULLETIN DE PAIE
-// =====================================================
 class BulletinDialog : public QWidget
 {
     Q_OBJECT
@@ -55,9 +53,7 @@ private:
     QTableWidget *tableauBulletin = nullptr;
 };
 
-// =====================================================
 // PAGE : MASSE SALARIALE
-// =====================================================
 class MasseSalarialeDialog : public QWidget
 {
     Q_OBJECT
@@ -78,9 +74,7 @@ private:
     QLabel *totalMasseLabel = nullptr;
 };
 
-// =====================================================
 // PAGE : EMPLOYÉS PAR POSTE
-// =====================================================
 class EmployesParPosteDialog : public QWidget
 {
     Q_OBJECT

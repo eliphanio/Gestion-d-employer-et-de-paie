@@ -12,7 +12,7 @@ class QStackedWidget;
 class QTableWidget;
 
 
-// ---------- Menu 4 : Edition d'un bulletin de paie ----------
+//Menu 4 : Edition d'un bulletin de paie
 class BulletinDialog : public QWidget
 {
     Q_OBJECT
@@ -38,7 +38,7 @@ private:
     int dernierAnnee = 0;
 };
 
-// ---------- Menu 5 : Masse salariale d'un mois par poste ----------
+//Menu 5 : Masse salariale d'un mois par poste
 class MasseSalarialeDialog : public QWidget
 {
     Q_OBJECT
@@ -65,7 +65,7 @@ private:
     int anneeCalculee = 0;
 };
 
-// ---------- Menu 6 : Employés par poste avec l'effectif ----------
+//Menu 6 : Employés par poste avec l'effectif
 class EmployesParPosteDialog : public QWidget
 {
     Q_OBJECT
@@ -81,7 +81,7 @@ private:
     QLabel *lblEffectif;
 };
 
-// ---------- Bonus : histogramme de la masse salariale par poste ----------
+// histogramme de la masse salariale par poste
 class GraphiqueMasseDialog : public QWidget
 {
     Q_OBJECT
