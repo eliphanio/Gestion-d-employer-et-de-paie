@@ -14,6 +14,10 @@ class updateEmployeDialog : public QDialog
 public:
     explicit updateEmployeDialog(QWidget *parent = nullptr);
     ~updateEmployeDialog();
+    void rechercherEmploye();
+
+private slots:
+    void on_buttonBoxUpdateEmploye_accepted();
 
 private:
     Ui::updateEmployeDialog *ui;

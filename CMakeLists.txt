@@ -49,7 +49,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         include/removeemployedialog.h src/removeemployedialog.cpp ui/removeemployedialog.ui
         include/paie_calcul.h src/paie_calcul.cpp
         include/frontend.h src/frontend.cpp
-
+        src/pointage.cpp include/pointage.h
+        include/comboboxhelper.h
+        src/comboboxhelper.cpp
+        .env .env.example
     )
 
 target_include_directories(GestionEmployer PRIVATE

@@ -15,6 +15,9 @@ public:
     explicit removePostDialog(QWidget *parent = nullptr);
     ~removePostDialog();
 
+private slots:
+    void on_buttonBoxRemovePoste_accepted();
+
 private:
     Ui::removePostDialog *ui;
 };

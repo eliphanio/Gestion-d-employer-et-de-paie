@@ -7,6 +7,7 @@
 #include <QStringList>
 #include <QIODevice>
 #include <QHash>
+#include <QSqlQuery>
 
 QSqlDatabase Database::db;
 
@@ -92,4 +93,33 @@ bool Database::connect()
 QSqlDatabase Database::getConnection()
 {
     return db;
+}
+
+QString Database::genererMatricule()
+{
+    if (!Database::connect())
+        return "";
+
+    QSqlQuery query(Database::getConnection());
+
+    query.prepare(
+        "SELECT MAX(CAST(SUBSTRING(Matricule, 4) AS UNSIGNED)) "
+        "FROM EMPLOYE "
+        "WHERE Matricule LIKE 'EMP%'"
+        );
+
+    if (!query.exec()) {
+        qDebug() << "Erreur génération matricule :"
+                 << query.lastError().text();
+        return "";
+    }
+
+    int dernierNumero = 0;
+
+    if (query.next())
+        dernierNumero = query.value(0).toInt();
+
+    return QString("EMP%1").arg(
+        dernierNumero + 1, 3, 10, QChar('0')
+        );
 }

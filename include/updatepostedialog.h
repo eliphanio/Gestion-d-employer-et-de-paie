@@ -14,6 +14,10 @@ class updatePosteDialog : public QDialog
 public:
     explicit updatePosteDialog(QWidget *parent = nullptr);
     ~updatePosteDialog();
+    void rechercherPoste();
+
+private slots:
+    void on_buttonBoxUpdatePoste_accepted();
 
 private:
     Ui::updatePosteDialog *ui;

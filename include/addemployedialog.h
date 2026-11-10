@@ -15,6 +15,9 @@ public:
     explicit addEmployeDialog(QWidget *parent = nullptr);
     ~addEmployeDialog();
 
+private slots:
+    void on_buttonBoxAddEmploye_accepted();
+
 private:
     Ui::addEmployeDialog *ui;
 };

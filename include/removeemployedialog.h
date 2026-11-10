@@ -15,6 +15,9 @@ public:
     explicit removeEmployeDialog(QWidget *parent = nullptr);
     ~removeEmployeDialog();
 
+private slots:
+    void on_buttonBoxRemoveEmploye_accepted();
+
 private:
     Ui::removeEmployeDialog *ui;
 };
