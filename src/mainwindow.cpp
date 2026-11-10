@@ -5,6 +5,7 @@
 #include "QPushButton"
 #include "QSqlQuery"
 #include <QSqlError>
+#include <QVBoxLayout>
 #include "database.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -12,6 +13,17 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    auto *layoutCentral = new QHBoxLayout(ui->centralwidget);   // à ajouter
+    layoutCentral->setContentsMargins(0, 0, 0, 0);      // à ajouter
+    layoutCentral->addWidget(ui->horizontalLayoutWidget);   // à ajouter
+
+    auto *layoutContainer = new QVBoxLayout(ui->container);     // à ajouter
+    layoutContainer->setContentsMargins(0, 0, 0, 0);    // à ajouter
+    layoutContainer->addWidget(ui->stackedWidgetContente);  // à ajouter 
+
+    resize(1000, 700); // à ajouter
+
 
     connect(ui->searchBar,
             &QLineEdit::textChanged,
