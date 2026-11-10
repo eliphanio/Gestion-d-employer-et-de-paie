@@ -10,13 +10,10 @@ Bulletin calculerBulletin(const QString &matricule, int mois, int annee)
 {
     Bulletin b;
 
-    // ==============================================================
     // ETAPE 1 : RECHERCHE D'INFORMATIONS RELATIVES A L'EMPLOYE
-    // ==============================================================
 
     // --- 1.1 Entrer le matricule, le mois et l'annee ------------
     // Depend de : les 3 parametres de la fonction
-    // Produit   : rien (arrete la fonction si une valeur est invalide)
     if (matricule.trimmed().isEmpty()) {
         b.erreur = "Le matricule est obligatoire";
         return b;
@@ -54,9 +51,7 @@ Bulletin calculerBulletin(const QString &matricule, int mois, int annee)
     b.poste     = q.value(2).toString();
 
 
-    // ==============================================================
     // ETAPE 2 : CALCUL DU BRUT
-    // ==============================================================
 
     // --- 2.1 Lire SalaireBase (POSTE), HeuresSup et JoursAbsence (POINTAGE)
 
@@ -64,7 +59,7 @@ Bulletin calculerBulletin(const QString &matricule, int mois, int annee)
     // Depend de : 1.2 (q, colonne 3)
     // Produit   : b.salaireBase
     bool salaireValide = false;
-    b.salaireBase = q.value(3).toDouble(&salaireValide);     // <-- A CORRIGER (voir note plus bas)
+    b.salaireBase = q.value(3).toDouble(&salaireValide); 
 
     if (!salaireValide || !std::isfinite(b.salaireBase)
         || b.salaireBase < 0) {
@@ -169,9 +164,7 @@ Bulletin calculerBulletin(const QString &matricule, int mois, int annee)
     }
 
 
-    // ==============================================================
     // ETAPE 3 : CALCUL DU NET
-    // ==============================================================
 
     // --- 3.1 Retenue absence = JoursAbsence x (SalaireBase / 30) -
     // Depend de : 2.1.c (joursAbsence) et 2.1.a (b.salaireBase)
@@ -196,9 +189,7 @@ Bulletin calculerBulletin(const QString &matricule, int mois, int annee)
 
 QList<LignePoste> masseSalarialeParPoste(int mois, int annee, double &total)
 {
-    // ==============================================================
     // 6.1 ENTRER LE MOIS ET L'ANNEE
-    // ==============================================================
     // Depend de : les parametres mois et annee (saisis dans l'interface)
     // Produit   : resultat (liste vide) et total = 0
     // (pas de validation ici : elle est faite dans calculerBulletin)
