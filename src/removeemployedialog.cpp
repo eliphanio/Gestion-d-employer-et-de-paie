@@ -1,6 +1,5 @@
 #include "removeemployedialog.h"
 #include "ui_removeemployedialog.h"
-#include "comboboxhelper.h"
 #include "database.h"
 
 #include <QSqlQuery>
@@ -13,7 +12,6 @@ removeEmployeDialog::removeEmployeDialog(QWidget *parent)
     , ui(new Ui::removeEmployeDialog)
 {
     ui->setupUi(this);
-    ComboBoxHelper::chargerMatricules(ui->matriculeEmployComboBox);
     connect(ui->buttonBoxRemoveEmploye, &QDialogButtonBox::rejected,
             this, &QDialog::reject);
 }
@@ -26,7 +24,7 @@ removeEmployeDialog::~removeEmployeDialog()
 void removeEmployeDialog::on_buttonBoxRemoveEmploye_accepted()
 {
     QString matricule =
-        ui->matriculeEmployComboBox->currentData().toString();
+        ui->matriculeLineEdit->text().trimmed();
 
     if (matricule.isEmpty()) {
         QMessageBox::warning(
