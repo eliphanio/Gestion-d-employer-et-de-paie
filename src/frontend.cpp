@@ -187,7 +187,7 @@ BulletinDialog::BulletinDialog(QWidget *parent)
     nomEdit->setReadOnly(true);
     posteEdit->setReadOnly(true);
 
-    matriculeEdit->setPlaceholderText("Ex : EMP001");
+    matriculeEdit->setPlaceholderText("Ex : E001");
 
     btnRechercher = new QPushButton("Rechercher");
 
@@ -314,9 +314,11 @@ BulletinDialog::BulletinDialog(QWidget *parent)
 
     // ---------- Connexions ----------
 
+    // « Rechercher » : étape 1 uniquement (nom + poste), sans calcul.
     connect(btnRechercher, &QPushButton::clicked,
-            this, &BulletinDialog::afficherBulletin);
+            this, &BulletinDialog::rechercherInfosEmploye);
 
+    // « Calculer » : étapes 2 et 3 (brut, net).
     connect(btnCalculer, &QPushButton::clicked,
             this, &BulletinDialog::afficherBulletin);
 
@@ -358,6 +360,56 @@ void BulletinDialog::viderResultats()
     }
 }
 
+// -----------------------------------------------------
+// ÉTAPE 1 : recherche de l'employé (EMPLOYE + POSTE)
+// -----------------------------------------------------
+void BulletinDialog::rechercherInfosEmploye()
+{
+    bulletinValide = false;
+
+    const QString matricule = matriculeEdit->text().trimmed();
+
+    if (matricule.isEmpty()) {
+        QMessageBox::warning(this, "Matricule manquant",
+                             "Veuillez saisir le matricule de l'employé.");
+        matriculeEdit->setFocus();
+        return;
+    }
+
+    QSqlDatabase connexion = connexionOuverte();
+    if (!connexion.isOpen()) {
+        QMessageBox::warning(this, "Base de données",
+                             "Impossible de se connecter à la base de données.");
+        return;
+    }
+
+    QSqlQuery q(connexion);
+    q.prepare("SELECT E.Nom, P.Libelle "
+              "FROM EMPLOYE E INNER JOIN POSTE P ON E.codePoste = P.codePoste "
+              "WHERE E.Matricule = :mat");
+    q.bindValue(":mat", matricule);
+
+    if (!q.exec()) {
+        qDebug() << "Erreur SQL :" << q.lastError().text();
+        return;
+    }
+
+    if (!q.next()) {
+        viderResultats();
+        QMessageBox::warning(this, "Employé introuvable",
+                             "Aucun employé ne porte ce matricule.");
+        return;
+    }
+
+    // On efface d'abord un éventuel ancien bulletin, puis on affiche nom et poste.
+    viderResultats();
+    nomEdit->setText(q.value("Nom").toString());
+    posteEdit->setText(q.value("Libelle").toString());
+}
+
+// -----------------------------------------------------
+// ÉTAPES 2 ET 3 : calcul du brut puis du net
+// -----------------------------------------------------
 void BulletinDialog::afficherBulletin()
 {
     bulletinValide = false;
@@ -430,8 +482,6 @@ void BulletinDialog::afficherBulletin()
     // Imprimable uniquement après un calcul réussi.
     bulletinValide = true;
 
-    QMessageBox::information(this, "Succès",
-                             "Le bulletin de paie a été calculé.");
 }
 
 void BulletinDialog::reinitialiserBulletin()
@@ -507,6 +557,7 @@ void BulletinDialog::imprimerBulletin()
         document.print(&printer);
     }
 }
+
 
 // =====================================================
 // =====================================================

@@ -22,7 +22,8 @@ public:
     explicit BulletinDialog(QWidget *parent = nullptr);
 
 private slots:
-    void afficherBulletin();
+    void rechercherInfosEmploye();   // étape 1 : nom + poste de l'employé
+    void afficherBulletin();         // étapes 2 et 3 : calcul du bulletin
     void reinitialiserBulletin();
     void imprimerBulletin();
 
