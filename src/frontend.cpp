@@ -314,8 +314,11 @@ BulletinDialog::BulletinDialog(QWidget *parent)
 
     // ---------- Connexions ----------
 
-    // « Rechercher » : étape 1 uniquement (nom + poste), sans calcul.
+    // « Rechercher » (ou touche Entrée) : étape 1 uniquement (nom + poste), sans calcul.
     connect(btnRechercher, &QPushButton::clicked,
+            this, &BulletinDialog::rechercherInfosEmploye);
+
+    connect(matriculeEdit, &QLineEdit::returnPressed,
             this, &BulletinDialog::rechercherInfosEmploye);
 
     // « Calculer » : étapes 2 et 3 (brut, net).
@@ -394,15 +397,15 @@ void BulletinDialog::rechercherInfosEmploye()
         return;
     }
 
+    // On efface d'abord un éventuel ancien bulletin.
+    viderResultats();
+
     if (!q.next()) {
-        viderResultats();
         QMessageBox::warning(this, "Employé introuvable",
                              "Aucun employé ne porte ce matricule.");
         return;
     }
 
-    // On efface d'abord un éventuel ancien bulletin, puis on affiche nom et poste.
-    viderResultats();
     nomEdit->setText(q.value("Nom").toString());
     posteEdit->setText(q.value("Libelle").toString());
 }
@@ -481,7 +484,6 @@ void BulletinDialog::afficherBulletin()
 
     // Imprimable uniquement après un calcul réussi.
     bulletinValide = true;
-
 }
 
 void BulletinDialog::reinitialiserBulletin()
@@ -603,9 +605,9 @@ MasseSalarialeDialog::MasseSalarialeDialog(QWidget *parent)
     QGroupBox *resultats = new QGroupBox("Résultats par poste");
     QVBoxLayout *resultatsLayout = new QVBoxLayout(resultats);
 
-    tableauMasse = new QTableWidget(0, 4);
+    tableauMasse = new QTableWidget(0, 3);
     tableauMasse->setHorizontalHeaderLabels({
-        "Poste", "Effectif", "Pointés", "Masse salariale (Ar)"
+        "Poste", "Effectif", "Masse salariale (Ar)"
     });
     tableauMasse->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     tableauMasse->verticalHeader()->hide();
@@ -661,8 +663,7 @@ void MasseSalarialeDialog::calculerMasse()
 
         tableauMasse->setItem(row, 0, new QTableWidgetItem(ligne.libelle));
         tableauMasse->setItem(row, 1, new QTableWidgetItem(QString::number(ligne.effectif)));
-        tableauMasse->setItem(row, 2, new QTableWidgetItem(QString::number(ligne.pointes)));
-        tableauMasse->setItem(row, 3, new QTableWidgetItem(montant(ligne.masse)));
+        tableauMasse->setItem(row, 2, new QTableWidgetItem(montant(ligne.masse)));
     }
 
     totalMasseLabel->setText("TOTAL GÉNÉRAL : " + montant(total) + " Ar");
