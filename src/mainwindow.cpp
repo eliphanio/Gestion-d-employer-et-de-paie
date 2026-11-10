@@ -40,7 +40,6 @@ MainWindow::MainWindow(QWidget *parent)
     layoutContainer->setContentsMargins(0, 0, 0, 0);
     layoutContainer->addWidget(ui->stackedWidgetContente);
 
-    resize(1000, 700);
 
     connect(ui->searchBar, &QLineEdit::textChanged,
             this, &MainWindow::rechercherEmploye);
@@ -287,7 +286,6 @@ void MainWindow::on_btnUpdatePost_clicked()
 void MainWindow::on_btnAddEmploye_clicked()
 {
     addEmployeDialog dialog(this);
-    dialog.exec();
     if (dialog.exec() == QDialog::Accepted) {
         afficheEmploye();
         affichePosteByEmploye();
