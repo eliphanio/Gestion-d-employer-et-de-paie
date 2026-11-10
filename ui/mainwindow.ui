@@ -234,7 +234,11 @@ background: rgb(20, 43, 255);</string>
          <string notr="true"/>
         </property>
         <property name="currentIndex">
+<<<<<<< HEAD
          <number>3</number>
+=======
+         <number>2</number>
+>>>>>>> main
         </property>
         <widget class="QWidget" name="postePage">
          <property name="styleSheet">
@@ -629,21 +633,7 @@ font-size: 15px;</string>
           </property>
          </widget>
         </widget>
-        <widget class="QWidget" name="pointagePage">
-         <widget class="QLabel" name="label_4">
-          <property name="geometry">
-           <rect>
-            <x>170</x>
-            <y>180</y>
-            <width>49</width>
-            <height>16</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>pointage</string>
-          </property>
-         </widget>
-        </widget>
+        <widget class="QWidget" name="pointagePage"/>
         <widget class="QWidget" name="paiePage">
          <widget class="QLabel" name="label_5">
           <property name="geometry">

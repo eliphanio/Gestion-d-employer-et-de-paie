@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>addEmployeDialog</class>
+ <widget class="QDialog" name="addEmployeDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Ajouté</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog {
+    background-color: #FFFFFF;
+}
+
+QLineEdit, QComboBox {
+    border: 1px solid #D1D5DB;
+    background-color: #F9FAFB;
+    border-radius: 6px;
+    padding: 4px 10px;
+    color: #1F2937;
+    font-size: 13px;
+    selection-background-color: #2563EB;
+}
+
+QLineEdit:hover, QComboBox:hover {
+    border: 1px solid #94A3B8;
+}
+
+QLineEdit:focus, QComboBox:focus {
+    border: 1px solid #2563EB;
+    background-color: #FFFFFF;
+}
+
+QLineEdit:disabled, QComboBox:disabled {
+    background-color: #F3F4F6;
+    color: #9CA3AF;
+    border: 1px solid #E5E7EB;
+}
+
+QLabel {
+    color: #374151;
+    font-size: 13px;
+    background-color: transparent;
+}</string>
+  </property>
+  <widget class="QWidget" name="formLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>29</x>
+     <y>60</y>
+     <width>341</width>
+     <height>141</height>
+    </rect>
+   </property>
+   <layout class="QFormLayout" name="formLayout">
+    <property name="verticalSpacing">
+     <number>24</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QLabel" name="nomEmployeLabel">
+      <property name="text">
+       <string>Nom de l'employe</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="nomEmployeLineEdit">
+      <property name="placeholderText">
+       <string>ELI Phanio</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="posteEmployLabel">
+      <property name="text">
+       <string>Poste de l'employé</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QComboBox" name="posteEmployLineEdit">
+      <property name="placeholderText">
+       <string>Développeur</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="adresseLabel">
+      <property name="text">
+       <string>Adresse</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="adresseLineEdit">
+      <property name="placeholderText">
+       <string>Andranomadio, Toamasina 1</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QDialogButtonBox" name="buttonBoxAddEmploye">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>230</y>
+     <width>291</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QDialogButtonBox {
+    background-color: transparent;
+    border: none;
+    padding: 10px 0px;
+}
+
+QDialogButtonBox QPushButton {
+    min-width: 100px;
+    min-height: 20px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+}
+
+/* Bouton OK */
+QDialogButtonBox QPushButton[text=&quot;OK&quot;] {
+    background-color: #2563EB;
+    color: white;
+}
+
+QDialogButtonBox QPushButton[text=&quot;OK&quot;]:hover {
+    background-color: #1D4ED8;
+}
+
+/* Bouton Annuler */
+QDialogButtonBox QPushButton[text=&quot;Cancel&quot;] {
+    background-color: #E5E7EB;
+    color: #374151;
+}
+
+QDialogButtonBox QPushButton[text=&quot;Cancel&quot;]:hover {
+    background-color: #D1D5DB;
+}
+
+QDialogButtonBox QPushButton:pressed {
+    padding-top: 10px;
+}</string>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>10</y>
+     <width>211</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: blue;
+font-weight: bold;
+font-size: 14px;</string>
+   </property>
+   <property name="text">
+    <string>Ajouté un(e) employé(e)</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

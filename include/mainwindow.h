@@ -28,6 +28,18 @@ public:
 private slots:
     void quitClicked();
 
+    void on_btnAddEmploye_clicked();
+
+    void on_btnAddPost_clicked();
+
+    void on_btnRemovePost_clicked();
+
+    void on_btnUpdatePost_clicked();
+
+    void on_btnUpdateEmploye_clicked();
+
+    void on_btnRemoveEmploye_clicked();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;

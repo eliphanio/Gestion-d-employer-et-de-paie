@@ -64,8 +64,8 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     connect(ui->menuEmployeByPoste, &QPushButton::clicked, this, [this]() {
-        afficherPagePaie(new EmployesParPosteDialog);
-    });
+                ui->stackedWidgetContente->setCurrentWidget(ui->posteEmployePage);
+            });
 
     connect(ui->menuQuitte, &QPushButton::clicked, this, &MainWindow::quitClicked);
 }
@@ -200,6 +200,8 @@ void MainWindow::affichePosteByEmploye()
     db.close();
 }
 
+
+
 void MainWindow::afficherPagePaie(QWidget *page)
 {
     // supprime la page de paie précédente pour éviter d'en accumuler
@@ -258,17 +260,13 @@ void MainWindow::rechercherEmploye()
     while (query.next()) {
         ui->tableWidgetEmploye->insertRow(ligne);
 
-        ui->tableWidgetEmploye->setItem(ligne, 0,
-                                        new QTableWidgetItem(query.value("Matricule").toString()));
+        ui->tableWidgetEmploye->setItem(ligne, 0, new QTableWidgetItem(query.value("Matricule").toString()));
 
-        ui->tableWidgetEmploye->setItem(ligne, 1,
-                                        new QTableWidgetItem(query.value("Nom").toString()));
+        ui->tableWidgetEmploye->setItem(ligne, 1, new QTableWidgetItem(query.value("Nom").toString()));
 
-        ui->tableWidgetEmploye->setItem(ligne, 2,
-                                        new QTableWidgetItem(query.value("Adresse").toString()));
+        ui->tableWidgetEmploye->setItem(ligne, 2, new QTableWidgetItem(query.value("Adresse").toString()));
 
-        ui->tableWidgetEmploye->setItem(ligne, 3,
-                                        new QTableWidgetItem(query.value("dateEmbauche").toString()));
+        ui->tableWidgetEmploye->setItem(ligne, 3, new QTableWidgetItem(query.value("dateEmbauche").toString()));
 
         ligne++;
     }
@@ -280,4 +278,46 @@ void MainWindow::rechercherEmploye()
 void MainWindow::quitClicked()
 {
     QApplication::quit();
+}
+
+
+void MainWindow::on_btnAddPost_clicked()
+{
+    addPostDialog dialog(this);
+    dialog.exec();
+}
+
+
+void MainWindow::on_btnRemovePost_clicked()
+{
+    removePostDialog dialog(this);
+    dialog.exec();
+}
+
+
+void MainWindow::on_btnUpdatePost_clicked()
+{
+    updatePosteDialog dialog(this);
+    dialog.exec();
+}
+
+
+void MainWindow::on_btnAddEmploye_clicked()
+{
+    addEmployeDialog dialog(this);
+    dialog.exec();
+}
+
+
+void MainWindow::on_btnUpdateEmploye_clicked()
+{
+    updateEmployeDialog dialog(this);
+    dialog.exec();
+}
+
+
+void MainWindow::on_btnRemoveEmploye_clicked()
+{
+    removeEmployeDialog dialog(this);
+    dialog.exec();
 }
