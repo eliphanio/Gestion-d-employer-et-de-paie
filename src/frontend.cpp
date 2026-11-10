@@ -249,6 +249,10 @@ BulletinDialog::BulletinDialog(QWidget *parent)
     tableauBulletin->verticalHeader()->hide();
     tableauBulletin->setEditTriggers(QAbstractItemView::NoEditTriggers);
     tableauBulletin->setAlternatingRowColors(true);
+    tableauBulletin->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    tableauBulletin->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+    tableauBulletin->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    tableauBulletin->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     const QStringList rubriques = {
         "Salaire de base",
@@ -459,13 +463,13 @@ void BulletinDialog::imprimerBulletin()
     )";
 
     html += "<p>Matricule : " + matriculeEdit->text().toHtmlEscaped() + "</p>";
-    html += "<p>Nom : " + nomEdit->text().toHtmlEscaped() + "</p>";
-    html += "<p>Poste : " + posteEdit->text().toHtmlEscaped() + "</p>";
     html += "<p>Période : "
             + moisBulletin->currentText().toHtmlEscaped()
             + " / "
             + anneeBulletin->currentText().toHtmlEscaped()
             + "</p>";
+    html += "<p>Nom : " + nomEdit->text().toHtmlEscaped() + "</p>";
+    html += "<p>Poste : " + posteEdit->text().toHtmlEscaped() + "</p>";
 
     html += R"(
         <table border="1" cellspacing="0" cellpadding="7" width="100%">
