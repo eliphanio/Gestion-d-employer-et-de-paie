@@ -234,11 +234,7 @@ background: rgb(20, 43, 255);</string>
          <string notr="true"/>
         </property>
         <property name="currentIndex">
-<<<<<<< HEAD
-         <number>3</number>
-=======
          <number>2</number>
->>>>>>> main
         </property>
         <widget class="QWidget" name="postePage">
          <property name="styleSheet">
