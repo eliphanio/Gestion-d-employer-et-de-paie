@@ -1,10 +1,3 @@
-/*
- * ======================================================================
- *  pointage.cpp : implementation du module POINTAGE
- *  Projet 4 - Gestion des employes et de la paie (Qt / C++ / MySQL)
- * ======================================================================
- */
-
 #include "pointage.h"
 
 #include <QComboBox>
@@ -24,16 +17,15 @@
 #include <QTableView>
 #include <QVBoxLayout>
 
-// ----------------------------------------------------------------------
-//  Noms des tables : modifiables a UN SEUL endroit.
-//  (sous Linux la casse compte : adapte si tes tables sont en MAJUSCULES)
-// ----------------------------------------------------------------------
+
+//  tables : modifiables a UN SEUL endroit.
+
+
 static const QString T_EMPLOYE  = "EMPLOYE";
 static const QString T_POINTAGE = "POINTAGE";
 
-// ======================================================================
 //  CONSTRUCTEUR
-// ======================================================================
+
 PointageWidget::PointageWidget(QWidget *parent)
     : QWidget(parent)
 {
@@ -44,9 +36,8 @@ PointageWidget::PointageWidget(QWidget *parent)
     majBoutons();            // Modifier/Supprimer inactifs au depart
 }
 
-// ======================================================================
 //  CONSTRUCTION DE L'INTERFACE
-// ======================================================================
+
 void PointageWidget::construireInterface()
 {
     // ---- Titre de la page ----
@@ -153,9 +144,7 @@ void PointageWidget::construireInterface()
     connect(table,        &QTableView::clicked,    this, &PointageWidget::onLigneChoisie);
 }
 
-// ======================================================================
 //  LISTES DEROULANTES
-// ======================================================================
 
 // Mois (1 a 12) et annee (de l'annee courante -5 a +1), avec valeurs par defaut
 void PointageWidget::remplirMoisAnnee()
@@ -205,9 +194,9 @@ QString PointageWidget::matriculeCourant() const
     return cbMatricule->currentData().toString();
 }
 
-// ======================================================================
+
 //  LISTAGE : remplit le tableau (jointure POINTAGE - EMPLOYE)
-// ======================================================================
+
 void PointageWidget::actualiserTable()
 {
     QSqlQuery q;
@@ -247,10 +236,10 @@ void PointageWidget::onRecherche(const QString &)
     actualiserTable();   // le texte est relu dans edRecherche
 }
 
-// ======================================================================
+
 //  CONTROLES DE SAISIE
 //  Retourne true si les donnees du formulaire sont coherentes
-// ======================================================================
+
 bool PointageWidget::validerSaisie()
 {
     // 1) Un employe doit etre choisi (liste vide si aucun employe en base)
@@ -295,9 +284,9 @@ bool PointageWidget::validerSaisie()
     return true;   // tout est correct
 }
 
-// ======================================================================
+
 //  RECHERCHE D'UN POINTAGE (SELECT) : existe-t-il deja ?
-// ======================================================================
+
 bool PointageWidget::pointageExiste(const QString &matricule, int mois, int annee)
 {
     QSqlQuery q;
@@ -314,9 +303,9 @@ bool PointageWidget::pointageExiste(const QString &matricule, int mois, int anne
     return q.value(0).toInt() > 0;
 }
 
-// ======================================================================
+
 //  AJOUT (SELECT puis INSERT)
-// ======================================================================
+
 void PointageWidget::onAjouter()
 {
     if (!validerSaisie())
@@ -355,12 +344,12 @@ void PointageWidget::onAjouter()
     emit pointageModifie();    // previent les autres modules
 }
 
-// ======================================================================
+
 //  MODIFICATION (SELECT puis UPDATE)
 //  On modifie la ligne CHOISIE dans le tableau. Son ancienne cle
 //  (cleMatricule, cleMois, cleAnnee) sert a la retrouver : on peut donc
 //  aussi changer l'employe, le mois ou l'annee de ce pointage.
-// ======================================================================
+
 void PointageWidget::onModifier()
 {
     // 1) Une ligne doit avoir ete choisie dans le tableau
@@ -420,10 +409,10 @@ void PointageWidget::onModifier()
     emit pointageModifie();
 }
 
-// ======================================================================
+
 //  SUPPRESSION (SELECT puis DELETE, avec confirmation)
 //  On supprime la ligne CHOISIE dans le tableau.
-// ======================================================================
+
 void PointageWidget::onSupprimer()
 {
     // 1) Une ligne doit avoir ete choisie dans le tableau
@@ -468,9 +457,8 @@ void PointageWidget::onSupprimer()
     emit pointageModifie();
 }
 
-// ======================================================================
+
 //  INTERACTION AVEC LE TABLEAU ET LE FORMULAIRE
-// ======================================================================
 
 // Clic sur une ligne : recopie ses valeurs dans le formulaire
 void PointageWidget::onLigneChoisie(const QModelIndex &index)
@@ -538,9 +526,9 @@ void PointageWidget::majBoutons()
     btnSupprimer->setEnabled(choisie);
 }
 
-// ======================================================================
+
 //  AFFICHAGE D'UNE ERREUR SQL (requete ratee, connexion perdue, etc.)
-// ======================================================================
+
 void PointageWidget::afficherErreurSql(const QSqlQuery &q)
 {
     QMessageBox::critical(this, "Erreur base de données",
