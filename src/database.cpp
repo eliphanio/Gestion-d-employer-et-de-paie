@@ -1,6 +1,11 @@
 #include "database.h"
 #include <QSqlError>
 #include <QDebug>
+#include <QFile>
+#include <QCoreApplication>
+#include <QSqlQuery>
+#include <QStringList>
+#include <QIODevice>
 
 QSqlDatabase Database::db;
 
