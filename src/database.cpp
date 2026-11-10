@@ -25,8 +25,8 @@ bool Database::connect()
         "Server=127.0.0.1;"
         "Port=3306;"
         "Database=gestion_paie;"
-        "User=root;"
-        "Password=;"
+        "User=paie;"
+        "Password=paie1234;"
         );
 
     if (!db.isOpen() && !db.open()) {
